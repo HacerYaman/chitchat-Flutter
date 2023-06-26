@@ -19,14 +19,15 @@ class MyTextField extends StatelessWidget {
             borderSide: BorderSide(color: Colors.grey.shade200,),
           borderRadius: BorderRadius.circular(16)
         ),
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white,)
-        ),
-        fillColor: Colors.grey[400],
+        focusedBorder: OutlineInputBorder(      //text yazmaya başladığındaki hali kutunun
+            borderSide: BorderSide(color: Colors.white,),
+            borderRadius: BorderRadius.circular(16)
+      ),
+        fillColor: Colors.grey[200],
         filled: true,
         hintText: hintText,
         hintStyle: TextStyle(
-          color: Colors.white,
+          color: Colors.grey,
         ),
       ),
     );

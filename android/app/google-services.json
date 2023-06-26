@@ -1,0 +1,118 @@
+{
+  "project_info": {
+    "project_number": "748216886246",
+    "project_id": "chitchat-flutter-9998f",
+    "storage_bucket": "chitchat-flutter-9998f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748216886246:android:6f36224245c6cda7a8ac27",
+        "android_client_info": {
+          "package_name": "com.baitent.chitchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "748216886246-2nghp871eppu64v89ik7lno2psuopmcj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSljiJ5_hkgWHRBel9vbFo_M4H5tQFDdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "748216886246-2nghp871eppu64v89ik7lno2psuopmcj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "748216886246-828phq1ips9g00l2meiine1g0r4r136n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chitchat.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748216886246:android:f397ee85789c5ca0a8ac27",
+        "android_client_info": {
+          "package_name": "com.example.chitchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "748216886246-2nghp871eppu64v89ik7lno2psuopmcj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSljiJ5_hkgWHRBel9vbFo_M4H5tQFDdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "748216886246-2nghp871eppu64v89ik7lno2psuopmcj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "748216886246-828phq1ips9g00l2meiine1g0r4r136n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chitchat.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748216886246:android:5d2a94b6c26e5323a8ac27",
+        "android_client_info": {
+          "package_name": "com.example.firebase_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "748216886246-2nghp871eppu64v89ik7lno2psuopmcj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSljiJ5_hkgWHRBel9vbFo_M4H5tQFDdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "748216886246-2nghp871eppu64v89ik7lno2psuopmcj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "748216886246-828phq1ips9g00l2meiine1g0r4r136n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chitchat.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

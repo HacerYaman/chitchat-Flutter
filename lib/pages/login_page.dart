@@ -1,34 +1,111 @@
+import 'package:chitchat/components/my_button.dart';
 import 'package:chitchat/components/my_text_field.dart';
+import 'package:chitchat/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final void Function()? onTap;
+  const LoginPage({super.key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
-  final emailController= TextEditingController();
-  final passwordController= TextEditingController();
+  void signIn() async {
+    //get the auth service
+    final authService = Provider.of<AuthService>(context, listen: false);
 
-
+    try {
+      await authService.signinWithEmailandPassword(
+          emailController.text, passwordController.text);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toString(),
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Column(
-            children: [
-              Image.asset("lib/assets/ccicon.png", width: 100, height: 100,),
-              Text("Welcome back you\'ve been missed! ❤️",
-                style: TextStyle(
-                  fontSize: 16,
-                ),),
-              MyTextField(controller: emailController, hintText: "email", obscureText: false),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Image.asset(
+                  "lib/assets/ccicon.png",
+                  width: 100,
+                  height: 100,
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                Text(
+                  "Welcome back you\'ve been missed! ❤️",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 20),
+                MyTextField(
+                    controller: emailController,
+                    hintText: "email",
+                    obscureText: false),
+                SizedBox(
+                  height: 20,
+                ),
+                MyTextField(
+                    controller: passwordController,
+                    hintText: "password",
+                    obscureText: true),
+                SizedBox(
+                  height: 20,
+                ),
+                MyButton(
+                  buttonText: "Sign In",
+                  onTap: signIn,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Not a member?",
+                      style: TextStyle(),
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    GestureDetector(
+                      onTap: widget.onTap,
+                      child: Text(
+                        "Register now",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
