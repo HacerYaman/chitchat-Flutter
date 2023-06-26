@@ -1,3 +1,4 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:chitchat/firebase_options.dart';
 import 'package:chitchat/services/auth/auth_gate.dart';
 import 'package:chitchat/services/auth/auth_service.dart';
@@ -25,8 +26,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Poppins', // Poppins fontunu varsayılan olarak ayarlayın
       ),
-      home: AuthGate(),
-    );
+        home: AnimatedSplashScreen(
+            duration: 3000,
+            splash: Image.asset(
+              "lib/assets/ccicon.png"
+            ),
+            splashIconSize: 200,
+            nextScreen: AuthGate(),
+            splashTransition: SplashTransition.fadeTransition,
+            backgroundColor: Colors.white));
   }
 }
-
