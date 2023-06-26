@@ -15,7 +15,7 @@ class ChatService extends ChangeNotifier {
     final Timestamp timestamp = Timestamp.now();
     //create a new message
     Message newMessage = Message(
-        currentUserId, currentUserEmail, receiverId, message, timestamp);
+        currentUserId, currentUserEmail, receiverId, message, timestamp,);
     //construct chat room id from current userid and receiver id
     List<String> ids = [currentUserId, receiverId];
     ids.sort(); //ensures the chat room id is alwatys the same for any pair of  users

@@ -6,25 +6,32 @@ class Message {
   final String receiverId;
   final String message;
   final Timestamp timestamp;
+ // final String senderUserName;
+ // final String receiverUserName;
 
   // buraya user namei de ekle
 
   Message(
-      this.senderId, this.senderEmail,
+      this.senderId,
+      this.senderEmail,
       this.receiverId,
       this.message,
-      this.timestamp);
+      this.timestamp,
+     // this.senderUserName,
+     // this.receiverUserName
+      );
 
   //convert to a map
 
-  Map<String, dynamic> toMap(){
-    return{
+  Map<String, dynamic> toMap() {
+    return {
       "senderEmail": senderEmail,
       "senderId": senderId,
       "receiverId": receiverId,
       "message": message,
       "timeStamp": timestamp,
+    //  "senderUserName": senderUserName,
+    //  "receiverUserName": receiverUserName,
     };
   }
-
 }

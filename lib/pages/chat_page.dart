@@ -7,13 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ChatPage extends StatefulWidget {
+  final String receiverUserName;
   final String receiverUserEmail;
   final String receiverUserID;
 
   const ChatPage(
       {super.key,
       required this.receiverUserEmail,
-      required this.receiverUserID});
+      required this.receiverUserID,
+      required this.receiverUserName});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -36,7 +38,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.receiverUserEmail),
+        title: Text(widget.receiverUserName),
       ),
       body: Column(
         children: [
@@ -75,26 +77,32 @@ class _ChatPageState extends State<ChatPage> {
         ? Alignment.centerRight
         : Alignment.centerLeft;
 
-    var messageTime = DateFormat('dd/MM HH:mm').format(data["timeStamp"].toDate());
+    var messageTime =
+        DateFormat('dd/MM HH:mm').format(data["timeStamp"].toDate());
 
     return Container(
       alignment: alignment,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          crossAxisAlignment: (data["senderId"] == _firebaseAuth.currentUser!.uid)
-              ? CrossAxisAlignment.end
-              : CrossAxisAlignment.start,
-          mainAxisAlignment: (data["senderId"] == _firebaseAuth.currentUser!.uid)
-              ? MainAxisAlignment.end
-              : MainAxisAlignment.start,
+          crossAxisAlignment:
+              (data["senderId"] == _firebaseAuth.currentUser!.uid)
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
+          mainAxisAlignment:
+              (data["senderId"] == _firebaseAuth.currentUser!.uid)
+                  ? MainAxisAlignment.end
+                  : MainAxisAlignment.start,
           children: [
-            Text(data["senderEmail"]),
-            SizedBox(height: 5,),
-            ChatBubble(message: data["message"], receiverId: data["receiverId"],),
-            Text(messageTime, style: TextStyle(
-              fontSize: 12, fontStyle: FontStyle.italic
-            ),),
+            //Text(data["senderEmail"]),
+            ChatBubble(
+              message: data["message"],
+              receiverId: data["receiverId"],
+            ),
+            Text(
+              messageTime,
+              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+            ),
           ],
         ),
       ),

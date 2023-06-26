@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("main paeg"),
+        title: Text("All Users"),
         actions: [
           IconButton(
             onPressed: signOut,
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
 
     if (_auth.currentUser!.email != data["email"]) {
       return ListTile(
-        title: Text(data["email"]),
+        title: Text(data["username"]),
         onTap: () {
           Navigator.push(
             context,
@@ -72,12 +72,13 @@ class _HomePageState extends State<HomePage> {
               builder: (context) => ChatPage(
                 receiverUserEmail: data["email"],
                 receiverUserID: data["uid"],
+                receiverUserName: data["username"],
               ),
             ),
           );
         },
       );
-    }else{
+    } else {
       return Container();
     }
   }
