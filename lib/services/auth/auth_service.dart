@@ -42,4 +42,14 @@ class AuthService extends ChangeNotifier {
       throw Exception(e.code);
     }
   }
+
+  Future<String?> getUsername() async {
+    final String userId = _firebaseAuth.currentUser!.uid;
+
+    final DocumentSnapshot snapshot = await _firebaseFirestore.collection('users').doc(userId).get();
+    Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+    final String? username = data?["username"];
+    return username;
+  }
+
 }

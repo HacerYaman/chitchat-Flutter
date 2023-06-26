@@ -1,3 +1,5 @@
+import 'package:chitchat/pages/profile_page.dart';
+import 'package:chitchat/pages/recent_chats_page.dart';
 import 'package:chitchat/services/auth/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,11 +26,23 @@ class _HomePageState extends State<HomePage> {
   int _page = 0;
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
+  Widget pageSituation(){
+    if(_page==0){
+      return _buildUserList();
+    }
+    if(_page==1){
+      return RecentChatsPage();
+    }
+    return ProfilePage();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
-      appBar: AppBar(
+
+      /*appBar: AppBar(
         title: Text("All Users"),
         actions: [
           IconButton(
@@ -37,7 +51,10 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: _buildUserList(),
+      */
+
+      body: pageSituation(),
+
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
         index: 0,
@@ -46,20 +63,22 @@ class _HomePageState extends State<HomePage> {
           Icon(Icons.shuffle, size: 30),
           Icon(Icons.chat, size: 30),
           Icon(Icons.person, size: 30),
-          Icon(Icons.settings, size: 30),
         ],
         color: Colors.white,
         buttonBackgroundColor: Colors.white,
         backgroundColor: Colors.grey.shade300,
         animationCurve: Curves.easeInOut,
-        animationDuration: Duration(milliseconds: 100),
+        animationDuration: Duration(milliseconds: 150),
+
         onTap: (index) {
           setState(() {
             _page = index;
           });
         },
+
         letIndexChange: (index) => true,
       ),
+
     );
   }
 
