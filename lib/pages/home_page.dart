@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'chat_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,9 +21,13 @@ class _HomePageState extends State<HomePage> {
     authService.signOut();
   }
 
+  int _page = 0;
+  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade300,
       appBar: AppBar(
         title: Text("All Users"),
         actions: [
@@ -34,6 +38,28 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: _buildUserList(),
+      bottomNavigationBar: CurvedNavigationBar(
+        key: _bottomNavigationKey,
+        index: 0,
+        height: 60.0,
+        items: <Widget>[
+          Icon(Icons.shuffle, size: 30),
+          Icon(Icons.chat, size: 30),
+          Icon(Icons.person, size: 30),
+          Icon(Icons.settings, size: 30),
+        ],
+        color: Colors.white,
+        buttonBackgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade300,
+        animationCurve: Curves.easeInOut,
+        animationDuration: Duration(milliseconds: 100),
+        onTap: (index) {
+          setState(() {
+            _page = index;
+          });
+        },
+        letIndexChange: (index) => true,
+      ),
     );
   }
 
