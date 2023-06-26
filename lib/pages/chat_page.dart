@@ -1,8 +1,10 @@
+import 'package:chitchat/components/chat_bubble.dart';
 import 'package:chitchat/components/my_text_field.dart';
 import 'package:chitchat/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChatPage extends StatefulWidget {
   final String receiverUserEmail;
@@ -73,13 +75,28 @@ class _ChatPageState extends State<ChatPage> {
         ? Alignment.centerRight
         : Alignment.centerLeft;
 
+    var messageTime = DateFormat('dd/MM HH:mm').format(data["timeStamp"].toDate());
+
     return Container(
       alignment: alignment,
-      child: Column(
-        children: [
-          Text(data["senderEmail"]),
-          Text(data["message"]),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: (data["senderId"] == _firebaseAuth.currentUser!.uid)
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
+          mainAxisAlignment: (data["senderId"] == _firebaseAuth.currentUser!.uid)
+              ? MainAxisAlignment.end
+              : MainAxisAlignment.start,
+          children: [
+            Text(data["senderEmail"]),
+            SizedBox(height: 5,),
+            ChatBubble(message: data["message"], receiverId: data["receiverId"],),
+            Text(messageTime, style: TextStyle(
+              fontSize: 12, fontStyle: FontStyle.italic
+            ),),
+          ],
+        ),
       ),
     );
   }
