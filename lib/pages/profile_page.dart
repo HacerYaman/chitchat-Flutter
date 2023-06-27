@@ -7,7 +7,7 @@ import '../components/profile_section.dart';
 import 'package:get/get.dart';
 
 import '../services/auth/auth_service.dart';
-import '../services/get_user_info.dart';
+import '../model/get_user_info.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);

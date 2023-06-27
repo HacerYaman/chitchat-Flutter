@@ -37,6 +37,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade300,
       body: SafeArea(
         child: Column(
           children: [
@@ -81,10 +82,28 @@ class _ChatPageState extends State<ChatPage> {
     return Row(
       children: [
         Expanded(
-          child: MyTextField(
-              controller: _messageController,
+          child: TextField(
+            controller: _messageController,
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade200,
+                  ),
+                  borderRadius: BorderRadius.circular(16)),
+              focusedBorder: OutlineInputBorder(
+                  //text yazmaya başladığındaki hali kutunun
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                  ),
+                  borderRadius: BorderRadius.circular(16)),
+              fillColor: Colors.white,
+              filled: true,
               hintText: "Enter message",
-              obscureText: false),
+              hintStyle: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+          ),
         ),
         IconButton(
           onPressed: sendMessage,
@@ -97,8 +116,6 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildMessageItem(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
-    //align the messages to right if the sender is current user vsvs
-
     var alignment = (data["senderId"] == _firebaseAuth.currentUser!.uid)
         ? Alignment.centerRight
         : Alignment.centerLeft;
@@ -109,7 +126,7 @@ class _ChatPageState extends State<ChatPage> {
     return Container(
       alignment: alignment,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
         child: Column(
           crossAxisAlignment:
               (data["senderId"] == _firebaseAuth.currentUser!.uid)
@@ -127,7 +144,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
             Text(
               messageTime,
-              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
             ),
           ],
         ),
