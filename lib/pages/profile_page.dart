@@ -1,11 +1,9 @@
+import 'package:chitchat/pages/update_profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../components/profile_section.dart';
-import '../services/auth/auth_service.dart';
-
+import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
 
@@ -33,7 +31,7 @@ class ProfilePage extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
                   child: Image(
-                    image: AssetImage("lib/assets/ccicon.png"),
+                    image: AssetImage("lib/assets/default.png"),
                   ),
                 ),
               ),
@@ -74,7 +72,7 @@ class ProfilePage extends StatelessWidget {
               SizedBox(
                 width: 200,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => Get.to(()=> UpdateProfileScreen()),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(

@@ -42,6 +42,7 @@ dependencies:
   intl: ^0.18.1
   animated_splash_screen: ^1.3.0
   curved_navigation_bar: ^1.0.3
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +69,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/assets/ccicon.png
+    - lib/assets/default.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   fonts:
