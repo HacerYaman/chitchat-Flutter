@@ -17,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool appBarVisibilityState = true;
 
   void signOut() {
     final authService = Provider.of<AuthService>(context, listen: false);
@@ -26,35 +27,27 @@ class _HomePageState extends State<HomePage> {
   int _page = 0;
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
-  Widget pageSituation(){
-    if(_page==0){
+  Widget pageSituation() {
+    if (_page == 0) {
       return _buildUserList();
     }
-    if(_page==1){
+    if (_page == 1) {
+      setState(() {
+        appBarVisibilityState = false;
+      });
       return RecentChatsPage();
     }
+    setState(() {
+      appBarVisibilityState = false;
+    });
     return ProfilePage();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
-
-      /*appBar: AppBar(
-        title: Text("All Users"),
-        actions: [
-          IconButton(
-            onPressed: signOut,
-            icon: Icon(Icons.logout_rounded),
-          )
-        ],
-      ),
-      */
-
       body: pageSituation(),
-
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
         index: 0,
@@ -69,37 +62,64 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.grey.shade300,
         animationCurve: Curves.easeInOut,
         animationDuration: Duration(milliseconds: 150),
-
         onTap: (index) {
           setState(() {
             _page = index;
           });
         },
-
         letIndexChange: (index) => true,
       ),
-
     );
   }
 
   Widget _buildUserList() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection("users").snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text("error");
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        }
-
-        return ListView(
-          children: snapshot.data!.docs
-              .map<Widget>((doc) => _buildUserListItem(doc))
-              .toList(),
-        );
-      },
+    return SafeArea(
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(15),
+              ),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  "Meet People!",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection("users").snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text("Error: ${snapshot.error}");
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              }
+              if (!snapshot.hasData) {
+                return Text("No data available");
+              }
+              return Expanded(
+                child: ListView(
+                  children: snapshot.data!.docs
+                      .map<Widget>((doc) => _buildUserListItem(doc))
+                      .toList(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 

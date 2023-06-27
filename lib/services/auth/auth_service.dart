@@ -31,7 +31,7 @@ class AuthService extends ChangeNotifier {
       //create a file for users collection
 
       String defaultPhotoURL = 'https://firebasestorage.googleapis.com/v0/b/chitchat-flutter-9998f.appspot.com/o/default.png?alt=media&token=557d082f-310f-4100-a817-c7bad67674cc';
-      String defaultBio= "Hi, it's my bio!❤️";
+      String defaultBio= "Hi, it's my bio!👋";
 
       _firebaseFirestore.collection("users").doc(userCredential.user!.uid).set({
         'uid': userCredential.user!.uid,
