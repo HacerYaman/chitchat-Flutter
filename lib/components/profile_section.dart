@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../services/auth/auth_service.dart';
 class ProfileSection extends StatefulWidget {
   final String title;
   final IconData icon;
-  final VoidCallback onPress;
 
   const ProfileSection({
     super.key,
     required this.title,
     required this.icon,
-    required this.onPress,
   });
 
   @override
@@ -19,7 +15,6 @@ class ProfileSection extends StatefulWidget {
 }
 
 class _ProfileSectionState extends State<ProfileSection> {
-
   @override
   Widget build(BuildContext context) {
     return Padding(
