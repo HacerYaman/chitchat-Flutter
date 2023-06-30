@@ -13,7 +13,7 @@ class UpdateProfileScreen extends StatelessWidget {
     final String email = _auth.currentUser!.email.toString();
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
+      backgroundColor: Colors.grey.shade200,
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(8),

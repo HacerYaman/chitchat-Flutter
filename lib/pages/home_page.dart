@@ -1,3 +1,4 @@
+import 'package:chitchat/components/searchbar.dart';
 import 'package:chitchat/pages/profile_page.dart';
 import 'package:chitchat/pages/recent_chats_page.dart';
 import 'package:chitchat/services/auth/auth_service.dart';
@@ -17,7 +18,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  bool appBarVisibilityState = true;
 
   void signOut() {
     final authService = Provider.of<AuthService>(context, listen: false);
@@ -32,21 +32,15 @@ class _HomePageState extends State<HomePage> {
       return _buildUserList();
     }
     if (_page == 1) {
-      setState(() {
-        appBarVisibilityState = false;
-      });
       return RecentChatsPage();
     }
-    setState(() {
-      appBarVisibilityState = false;
-    });
     return ProfilePage();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
+      backgroundColor: Colors.grey.shade200,
       body: pageSituation(),
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
@@ -59,7 +53,7 @@ class _HomePageState extends State<HomePage> {
         ],
         color: Colors.white,
         buttonBackgroundColor: Colors.white,
-        backgroundColor: Colors.grey.shade300,
+        backgroundColor: Colors.grey.shade200,
         animationCurve: Curves.easeInOut,
         animationDuration: Duration(milliseconds: 150),
         onTap: (index) {
@@ -97,6 +91,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+          MySearchBar(),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection("users").snapshots(),
             builder: (context, snapshot) {
@@ -129,7 +124,26 @@ class _HomePageState extends State<HomePage> {
 
     if (_auth.currentUser!.email != data["email"]) {
       return ListTile(
-        title: Text(data["username"]),
+        leading: CircleAvatar(
+          backgroundColor: Colors.white,
+          child: Image.asset(
+            "lib/assets/default.png",
+            width: 30,
+            height: 30,
+          ),
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(data["username"]),
+            Text(
+              data["bio"],
+              style: TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
         onTap: () {
           Navigator.push(
             context,

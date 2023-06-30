@@ -11,7 +11,7 @@ class _RecentChatsPageState extends State<RecentChatsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
+      backgroundColor: Colors.grey.shade200,
       body: SafeArea(child: Text("recent chats")),
     );
   }

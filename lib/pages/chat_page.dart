@@ -37,7 +37,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
+      backgroundColor: Colors.grey.shade200,
       body: SafeArea(
         child: Column(
           children: [
@@ -104,6 +104,10 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
           ),
+        ),
+        IconButton(
+          onPressed: (){},
+          icon: Icon(Icons.camera_alt),
         ),
         IconButton(
           onPressed: sendMessage,
