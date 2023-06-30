@@ -106,7 +106,7 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ),
         IconButton(
-          onPressed: (){},
+          onPressed: () {},
           icon: Icon(Icons.camera_alt),
         ),
         IconButton(

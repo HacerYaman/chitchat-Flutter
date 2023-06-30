@@ -1,7 +1,9 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:chitchat/firebase_options.dart';
+import 'package:chitchat/pages/onboarding_page.dart';
 import 'package:chitchat/services/auth/auth_gate.dart';
 import 'package:chitchat/services/auth/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -13,27 +15,35 @@ void main() async {
 
   runApp(ChangeNotifierProvider(
     create: (context) => AuthService(),
-    child: const MyApp(),
+    child: MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  MyApp({Key? key});
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
+    final bool isLoged;
+
+    if (_auth.currentUser!.uid == null) {
+      isLoged = false;
+    } else {
+      isLoged = true;
+    }
+
     return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Poppins', // Poppins fontunu varsayılan olarak ayarlayın
-      ),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: 'Poppins',
+        ),
         home: AnimatedSplashScreen(
             duration: 3000,
-            splash: Image.asset(
-              "lib/assets/ccicon.png"
-            ),
+            splash: Image.asset("lib/assets/ccicon.png"),
             splashIconSize: 200,
-            nextScreen: AuthGate(),
+            nextScreen: isLoged ? AuthGate() : OnboardingPage(),
             splashTransition: SplashTransition.fadeTransition,
             backgroundColor: Colors.white));
   }
