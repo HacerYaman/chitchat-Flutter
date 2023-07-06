@@ -62,7 +62,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       backgroundColor: Colors.black,
                     ),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> AuthGate()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => AuthGate()));
                     },
                     child: Text(
                       'Login',

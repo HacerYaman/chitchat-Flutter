@@ -1,10 +1,16 @@
+import 'dart:io';
 import 'package:chitchat/components/chat_bubble.dart';
 import 'package:chitchat/components/my_text_field.dart';
 import 'package:chitchat/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ChatPage extends StatefulWidget {
   final String receiverUserName;
@@ -25,6 +31,7 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final Uuid uuid = Uuid();
 
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
@@ -33,6 +40,32 @@ class _ChatPageState extends State<ChatPage> {
       _messageController.clear();
     }
   }
+
+  //---------------------------------------
+  File? imageFile;
+
+  Future getImage() async {
+    ImagePicker _picker = ImagePicker();
+    await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
+      if (xFile != null) {
+        imageFile = File(xFile.path);
+        uploadImage();
+      }
+    });
+  }
+
+  Future uploadImage() async {
+    String fileName = Uuid().v1();
+    var ref =
+        FirebaseStorage.instance.ref().child("images").child("$fileName.jpg");
+
+    var uploadTask = await ref.putFile(imageFile!);
+
+    String imageUrl = await uploadTask.ref.getDownloadURL();
+
+    print(imageUrl);
+  }
+  //---------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +90,14 @@ class _ChatPageState extends State<ChatPage> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
+                  ),
+                  Image.asset(
+                    "lib/assets/default.png",
+                    width: 30,
+                    height: 30,
+                  ),
+                  SizedBox(
+                    width: 5,
                   ),
                   Text(
                     widget.receiverUserName,
@@ -106,7 +147,7 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: getImage,
           icon: Icon(Icons.camera_alt),
         ),
         IconButton(
@@ -141,7 +182,6 @@ class _ChatPageState extends State<ChatPage> {
                   ? MainAxisAlignment.end
                   : MainAxisAlignment.start,
           children: [
-            //Text(data["senderEmail"]),
             ChatBubble(
               message: data["message"],
               receiverId: data["receiverId"],

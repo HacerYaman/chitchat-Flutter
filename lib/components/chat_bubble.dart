@@ -24,7 +24,7 @@ class _ChatBubbleState extends State<ChatBubble> {
         padding: EdgeInsets.only(left: 10,right: 10,top:8, bottom: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.blue,
+          color: Colors.blue.shade300,
         ),
         child: Column(
           children: [
@@ -44,7 +44,7 @@ class _ChatBubbleState extends State<ChatBubble> {
         padding: EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.amber,
+          color: Colors.amber.shade300,
         ),
         child: Column(
           children: [
