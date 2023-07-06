@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 class ChatBubble extends StatefulWidget {
   final String message;
   final String receiverId;
+  final String messageType;
+  final String imageUrl;
   const ChatBubble({
     super.key,
     required this.message,
-    required this.receiverId,
+    required this.receiverId, required this.messageType, required this.imageUrl,
   });
 
   @override
@@ -28,13 +30,25 @@ class _ChatBubbleState extends State<ChatBubble> {
         ),
         child: Column(
           children: [
-            Text(
-              widget.message,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
+            Visibility(
+              visible: widget.messageType=="image"? false :true,
+              child: Text(
+                widget.message,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
               ),
             ),
+            Visibility(
+              visible: widget.messageType=="image"? true :false,
+              child: Image.network(
+               widget.imageUrl,
+               width: 200,
+               height: 200,
+                fit: BoxFit.cover,
+              ),
+            )
           ],
         ),
       );
@@ -48,13 +62,25 @@ class _ChatBubbleState extends State<ChatBubble> {
         ),
         child: Column(
           children: [
-            Text(
-              widget.message,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
+            Visibility(
+              visible: widget.messageType=="image"? false :true,
+              child: Text(
+                widget.message,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
               ),
             ),
+            Visibility(
+              visible: widget.messageType=="image"? true :false,
+              child: Image.network(
+                widget.imageUrl,
+                width: 200,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+            )
           ],
         ),
       );

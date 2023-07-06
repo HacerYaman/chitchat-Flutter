@@ -6,20 +6,23 @@ class Message {
   final String receiverId;
   final String message;
   final Timestamp timestamp;
- // final String senderUserName;
- // final String receiverUserName;
+  final String messageType;
+  final String imageUrl;
+  // final String senderUserName;
+  // final String receiverUserName;
 
   // buraya user namei de ekle
 
   Message(
-      this.senderId,
-      this.senderEmail,
-      this.receiverId,
-      this.message,
-      this.timestamp,
-     // this.senderUserName,
-     // this.receiverUserName
-      );
+    this.senderId,
+    this.senderEmail,
+    this.receiverId,
+    this.message,
+    this.timestamp,
+    this.messageType, this.imageUrl,
+    // this.senderUserName,
+    // this.receiverUserName
+  );
 
   //convert to a map
 
@@ -30,8 +33,10 @@ class Message {
       "receiverId": receiverId,
       "message": message,
       "timeStamp": timestamp,
-    //  "senderUserName": senderUserName,
-    //  "receiverUserName": receiverUserName,
+      "messageType" : messageType,
+      "imageUrl": imageUrl,
+      //  "senderUserName": senderUserName,
+      //  "receiverUserName": receiverUserName,
     };
   }
 }

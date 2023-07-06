@@ -31,13 +31,27 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   final Uuid uuid = Uuid();
 
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
+      String imageUrl = '';
+
+      if (imageFile != null) {
+        imageUrl = await uploadImage();
+        imageFile = null; // Resim dosyasını sıfırla
+      }
+
       await _chatService.sendMessage(
-          widget.receiverUserID, _messageController.text);
+        widget.receiverUserID,
+        _messageController.text,
+        imageUrl,
+      );
+
       _messageController.clear();
+      imageUrl = ''; // URL'yi sıfırla
     }
   }
 
@@ -55,16 +69,26 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future uploadImage() async {
+    // Future<String> uploadImage() async {
     String fileName = Uuid().v1();
     var ref =
         FirebaseStorage.instance.ref().child("images").child("$fileName.jpg");
-
     var uploadTask = await ref.putFile(imageFile!);
-
     String imageUrl = await uploadTask.ref.getDownloadURL();
-
     print(imageUrl);
+
+    await _chatService.sendMessage(
+      widget.receiverUserID,
+      _messageController.text,
+      imageUrl,
+    );
+
+    imageUrl = "";
+    imageFile = null;
+
+    //return imageUrl;
   }
+
   //---------------------------------------
 
   @override
@@ -148,7 +172,7 @@ class _ChatPageState extends State<ChatPage> {
         ),
         IconButton(
           onPressed: getImage,
-          icon: Icon(Icons.camera_alt),
+          icon: Icon(Icons.photo),
         ),
         IconButton(
           onPressed: sendMessage,
@@ -168,32 +192,67 @@ class _ChatPageState extends State<ChatPage> {
     var messageTime =
         DateFormat('dd/MM HH:mm').format(data["timeStamp"].toDate());
 
-    return Container(
-      alignment: alignment,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-        child: Column(
-          crossAxisAlignment:
-              (data["senderId"] == _firebaseAuth.currentUser!.uid)
-                  ? CrossAxisAlignment.end
-                  : CrossAxisAlignment.start,
-          mainAxisAlignment:
-              (data["senderId"] == _firebaseAuth.currentUser!.uid)
-                  ? MainAxisAlignment.end
-                  : MainAxisAlignment.start,
-          children: [
-            ChatBubble(
-              message: data["message"],
-              receiverId: data["receiverId"],
+    return data["messageType"] == "text"
+        ? Container(
+            alignment: alignment,
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+              child: Column(
+                crossAxisAlignment:
+                    (data["senderId"] == _firebaseAuth.currentUser!.uid)
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
+                mainAxisAlignment:
+                    (data["senderId"] == _firebaseAuth.currentUser!.uid)
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
+                children: [
+                  ChatBubble(
+                    message: data["message"],
+                    receiverId: data["receiverId"],
+                    messageType: '',
+                    imageUrl: '',
+                  ),
+                  Text(
+                    messageTime,
+                    style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
             ),
-            Text(
-              messageTime,
-              style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
+          )
+        : Container(
+            alignment: alignment,
+            width: 200,
+            height: 235,
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+              child: Column(
+                crossAxisAlignment:
+                    (data["senderId"] == _firebaseAuth.currentUser!.uid)
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
+                mainAxisAlignment:
+                    (data["senderId"] == _firebaseAuth.currentUser!.uid)
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
+                children: [
+                  ChatBubble(
+                    message: data["message"],
+                    receiverId: data["receiverId"],
+                    messageType: data["messageType"],
+                    imageUrl: data["imageUrl"],
+                  ),
+                  Text(
+                    messageTime,
+                    style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   Widget _buildMessageList() {

@@ -8,14 +8,23 @@ class ChatService extends ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   //SENDING MESSAGE
-  Future<void> sendMessage(String receiverId, String message) async {
+  Future<void> sendMessage(String receiverId, String message, String imageUrl) async {
     //get user info
     final String currentUserId = _firebaseAuth.currentUser!.uid;
     final String currentUserEmail = _firebaseAuth.currentUser!.email.toString();
     final Timestamp timestamp = Timestamp.now();
-    //create a new message
+    final String messageType = imageUrl.isEmpty ? "text" : "image";
+
     Message newMessage = Message(
-        currentUserId, currentUserEmail, receiverId, message, timestamp,);
+      currentUserId,
+      currentUserEmail,
+      receiverId,
+      message,
+      timestamp,
+      messageType,
+      imageUrl,
+    );
+
     //construct chat room id from current userid and receiver id
     List<String> ids = [currentUserId, receiverId];
     ids.sort(); //ensures the chat room id is alwatys the same for any pair of  users
