@@ -1,6 +1,7 @@
 import 'package:chitchat/model/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ChatService extends ChangeNotifier {
@@ -51,5 +52,20 @@ class ChatService extends ChangeNotifier {
         .collection("messages")
         .orderBy("timeStamp", descending: false)
         .snapshots();
+  }
+
+  viewImage(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: Image.network(imageUrl),
+          ),
+        );
+      },
+    );
   }
 }

@@ -1,12 +1,9 @@
 import 'dart:io';
 import 'package:chitchat/components/chat_bubble.dart';
-import 'package:chitchat/components/my_text_field.dart';
 import 'package:chitchat/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -144,41 +141,47 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildMessageInput() {
-    return Row(
-      children: [
-        Expanded(
-          child: TextField(
-            controller: _messageController,
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade200,
-                  ),
-                  borderRadius: BorderRadius.circular(16)),
-              focusedBorder: OutlineInputBorder(
-                  //text yazmaya başladığındaki hali kutunun
-                  borderSide: BorderSide(
-                    color: Colors.white,
-                  ),
-                  borderRadius: BorderRadius.circular(16)),
-              fillColor: Colors.white,
-              filled: true,
-              hintText: "Enter message",
-              hintStyle: TextStyle(
-                color: Colors.grey,
+    return Container(
+      height: 50,
+      decoration: BoxDecoration(
+          color: Colors.red, borderRadius: BorderRadius.circular(16)),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _messageController,
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade200,
+                    ),
+                    borderRadius: BorderRadius.circular(16)),
+                focusedBorder: OutlineInputBorder(
+                    //text yazmaya başladığındaki hali kutunun
+                    borderSide: BorderSide(
+                      color: Colors.white,
+                    ),
+                    borderRadius: BorderRadius.circular(16)),
+                fillColor: Colors.white,
+                filled: true,
+                hintText: "Enter message",
+                hintStyle: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey,
+                ),
               ),
             ),
           ),
-        ),
-        IconButton(
-          onPressed: getImage,
-          icon: Icon(Icons.photo),
-        ),
-        IconButton(
-          onPressed: sendMessage,
-          icon: Icon(Icons.arrow_forward_ios),
-        )
-      ],
+          IconButton(
+            onPressed: getImage,
+            icon: Icon(Icons.photo),
+          ),
+          IconButton(
+            onPressed: sendMessage,
+            icon: Icon(Icons.arrow_forward_ios),
+          )
+        ],
+      ),
     );
   }
 
@@ -211,8 +214,8 @@ class _ChatPageState extends State<ChatPage> {
                   ChatBubble(
                     message: data["message"],
                     receiverId: data["receiverId"],
-                    messageType: '',
-                    imageUrl: '',
+                    messageType: data["messageType"],
+                    imageUrl: data["imageUrl"],
                   ),
                   Text(
                     messageTime,
@@ -222,34 +225,40 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
           )
-        : Container(
-            alignment: alignment,
-            width: 200,
-            height: 235,
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-              child: Column(
-                crossAxisAlignment:
-                    (data["senderId"] == _firebaseAuth.currentUser!.uid)
-                        ? CrossAxisAlignment.end
-                        : CrossAxisAlignment.start,
-                mainAxisAlignment:
-                    (data["senderId"] == _firebaseAuth.currentUser!.uid)
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                children: [
-                  ChatBubble(
-                    message: data["message"],
-                    receiverId: data["receiverId"],
-                    messageType: data["messageType"],
-                    imageUrl: data["imageUrl"],
-                  ),
-                  Text(
-                    messageTime,
-                    style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
-                  ),
-                ],
+        : InkWell(
+            onTap: () {
+              _chatService.viewImage(context, data["imageUrl"]);
+            },
+            child: Container(
+              alignment: alignment,
+              width: 200,
+              height: 235,
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+                child: Column(
+                  crossAxisAlignment:
+                      (data["senderId"] == _firebaseAuth.currentUser!.uid)
+                          ? CrossAxisAlignment.end
+                          : CrossAxisAlignment.start,
+                  mainAxisAlignment:
+                      (data["senderId"] == _firebaseAuth.currentUser!.uid)
+                          ? MainAxisAlignment.end
+                          : MainAxisAlignment.start,
+                  children: [
+                    ChatBubble(
+                      message: data["message"],
+                      receiverId: data["receiverId"],
+                      messageType: data["messageType"],
+                      imageUrl: data["imageUrl"],
+                    ),
+                    Text(
+                      messageTime,
+                      style:
+                          TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

@@ -26,13 +26,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLoged;
 
-    if (_auth.currentUser!.uid == null) {
-      isLoged = false;
-    } else {
-      isLoged = true;
-    }
+    final User? currentUser = _auth.currentUser;
+    final bool isLogged = currentUser != null;
 
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
@@ -43,7 +39,7 @@ class MyApp extends StatelessWidget {
             duration: 3000,
             splash: Image.asset("lib/assets/ccicon.png"),
             splashIconSize: 200,
-            nextScreen: isLoged ? AuthGate() : OnboardingPage(),
+            nextScreen: isLogged ? AuthGate() : OnboardingPage(),
             splashTransition: SplashTransition.fadeTransition,
             backgroundColor: Colors.white));
   }

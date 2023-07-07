@@ -38,74 +38,76 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Image.asset(
-                  "lib/assets/ccicon.png",
-                  width: 100,
-                  height: 100,
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  "Welcome back you\'ve been missed! ❤️",
-                  style: TextStyle(
-                    fontSize: 16,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
-                SizedBox(height: 20),
-                MyTextField(
-                    controller: emailController,
-                    hintText: "email",
-                    obscureText: false),
-                SizedBox(
-                  height: 20,
-                ),
-                MyTextField(
-                    controller: passwordController,
-                    hintText: "password",
-                    obscureText: true),
-                SizedBox(
-                  height: 20,
-                ),
-                MyButton(
-                  buttonText: "Sign In",
-                  onTap: signIn,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Not a member?",
-                      style: TextStyle(),
+                  Image.asset(
+                    "lib/assets/ccicon.png",
+                    width: 100,
+                    height: 100,
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    "Welcome back you\'ve been missed! ❤️",
+                    style: TextStyle(
+                      fontSize: 16,
                     ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: Text(
-                        "Register now",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
+                  ),
+                  SizedBox(height: 20),
+                  MyTextField(
+                      controller: emailController,
+                      hintText: "email",
+                      obscureText: false),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  MyTextField(
+                      controller: passwordController,
+                      hintText: "password",
+                      obscureText: true),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  MyButton(
+                    buttonText: "Sign In",
+                    onTap: signIn,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Not a member?",
+                        style: TextStyle(),
                       ),
-                    )
-                  ],
-                ),
-              ],
+                      SizedBox(
+                        width: 4,
+                      ),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: Text(
+                          "Register now",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
