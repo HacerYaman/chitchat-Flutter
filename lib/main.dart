@@ -9,9 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
 
+import 'api/firebase_api.dart';
+
+final navigatorKey= GlobalKey<NavigatorState>(); //for navigation purposses
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseApi().initNotifications();
 
   runApp(ChangeNotifierProvider(
     create: (context) => AuthService(),
