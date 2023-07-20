@@ -33,6 +33,15 @@ Future initPushNotifications() async{
   FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
   FirebaseMessaging.onBackgroundMessage((message) => handleBackgroundMessage(message)); // Değişiklik burada
 
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
+
 }
 
 class FirebaseApi{
@@ -42,7 +51,9 @@ class FirebaseApi{
     await _firebaseMessaging.requestPermission();
     final fCMToken= await _firebaseMessaging.getToken();
     print("token:$fCMToken"); //reg token
-    initPushNotifications();
+    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage); // Değişiklik burada
+
+   // initPushNotifications();
   }
 
 }

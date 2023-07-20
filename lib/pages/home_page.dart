@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildUserListItem(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic> data =
-        documentSnapshot.data()! as Map<String, dynamic>;
+    documentSnapshot.data()! as Map<String, dynamic>;
 
     if (_auth.currentUser!.email != data["email"]) {
       return ListTile(

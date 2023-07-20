@@ -26,7 +26,7 @@ class _ChatBubbleState extends State<ChatBubble> {
         padding: EdgeInsets.only(left: 10,right: 10,top:8, bottom: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.blue.shade300,
+          color: Colors.white,
         ),
         child: Column(
           children: [
@@ -36,16 +36,16 @@ class _ChatBubbleState extends State<ChatBubble> {
                 widget.message,
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
               ),
             ),
             Visibility(
               visible: widget.messageType=="image"? true :false,
               child: Image.network(
-               widget.imageUrl,
-               width: 200,
-               height: 200,
+                widget.imageUrl,
+                width: 200,
+                height: 200,
                 fit: BoxFit.cover,
               ),
             )
@@ -68,7 +68,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                 widget.message,
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
               ),
             ),

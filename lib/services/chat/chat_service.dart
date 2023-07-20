@@ -9,8 +9,11 @@ class ChatService extends ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   //SENDING MESSAGE
-  Future<void> sendMessage(String receiverId, String message, String imageUrl) async {
-    //get user info
+  Future<void> sendMessage(
+      String receiverId,
+      String message,
+      String imageUrl,
+      ) async {
     final String currentUserId = _firebaseAuth.currentUser!.uid;
     final String currentUserEmail = _firebaseAuth.currentUser!.email.toString();
     final Timestamp timestamp = Timestamp.now();
@@ -26,32 +29,53 @@ class ChatService extends ChangeNotifier {
       imageUrl,
     );
 
-    //construct chat room id from current userid and receiver id
-    List<String> ids = [currentUserId, receiverId];
-    ids.sort(); //ensures the chat room id is alwatys the same for any pair of  users
-    String chatRoomId = ids.join(
-        "_"); //combine the ids into a single strinog to use as a chatroom id
-    // add new message to db
-    await _firebaseFirestore
-        .collection("chat_rooms")
-        .doc(chatRoomId)
-        .collection("messages")
-        .add(newMessage.toMap());
+    List<String> participants = [currentUserId, receiverId];
+    participants.sort();
+    String chatRoomId = participants.join("_");
+
+    await _firebaseFirestore.collection("chat_rooms").doc(chatRoomId).set({
+      'participants': participants,
+    }, SetOptions(merge: true)).then((_) {
+      return _firebaseFirestore
+          .collection("chat_rooms")
+          .doc(chatRoomId)
+          .collection("messages")
+          .add(newMessage.toMap());
+    }).catchError((error) {
+      print("Error sending message: $error");
+    });
   }
 
   //GETTİNG MESSAGES
-
   Stream<QuerySnapshot> getMessages(String userId, String otherUserId) {
     List<String> ids = [userId, otherUserId];
     ids.sort();
     String chatRoomId = ids.join("_");
-
     return _firebaseFirestore
         .collection("chat_rooms")
         .doc(chatRoomId)
         .collection("messages")
         .orderBy("timeStamp", descending: false)
         .snapshots();
+  }
+
+  Future<List<String>> getRecentChats() async {
+    final String currentUserId = _firebaseAuth.currentUser!.uid;
+    final QuerySnapshot snapshot = await _firebaseFirestore
+        .collection("chat_rooms")
+        .where("participants", arrayContains: currentUserId)
+        .get();
+
+    List<String> recentChats = [];
+
+    for (QueryDocumentSnapshot doc in snapshot.docs) {
+      List<dynamic> participants = doc.get("participants");
+      participants.remove(currentUserId);
+      String otherUserId = participants[0];
+
+      recentChats.add(otherUserId);
+    }
+    return recentChats;
   }
 
   viewImage(BuildContext context, String imageUrl) {

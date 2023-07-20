@@ -16,9 +16,9 @@ class ChatPage extends StatefulWidget {
 
   const ChatPage(
       {super.key,
-      required this.receiverUserEmail,
-      required this.receiverUserID,
-      required this.receiverUserName});
+        required this.receiverUserEmail,
+        required this.receiverUserID,
+        required this.receiverUserName});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -69,7 +69,7 @@ class _ChatPageState extends State<ChatPage> {
     // Future<String> uploadImage() async {
     String fileName = Uuid().v1();
     var ref =
-        FirebaseStorage.instance.ref().child("images").child("$fileName.jpg");
+    FirebaseStorage.instance.ref().child("images").child("$fileName.jpg");
     var uploadTask = await ref.putFile(imageFile!);
     String imageUrl = await uploadTask.ref.getDownloadURL();
     print(imageUrl);
@@ -140,11 +140,11 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  Widget _buildMessageInput() {
+  Widget _buildMessageInput() {     //mesaj barı
     return Container(
       height: 50,
       decoration: BoxDecoration(
-          color: Colors.red, borderRadius: BorderRadius.circular(16)),
+          color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
       child: Row(
         children: [
           Expanded(
@@ -155,13 +155,13 @@ class _ChatPageState extends State<ChatPage> {
                     borderSide: BorderSide(
                       color: Colors.grey.shade200,
                     ),
-                    borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
                 focusedBorder: OutlineInputBorder(
-                    //text yazmaya başladığındaki hali kutunun
+                  //text yazmaya başladığındaki hali kutunun
                     borderSide: BorderSide(
                       color: Colors.white,
                     ),
-                    borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
                 fillColor: Colors.white,
                 filled: true,
                 hintText: "Enter message",
@@ -193,75 +193,75 @@ class _ChatPageState extends State<ChatPage> {
         : Alignment.centerLeft;
 
     var messageTime =
-        DateFormat('dd/MM HH:mm').format(data["timeStamp"].toDate());
+    DateFormat('dd/MM HH:mm').format(data["timeStamp"].toDate());
 
     return data["messageType"] == "text"
         ? Container(
-            alignment: alignment,
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-              child: Column(
-                crossAxisAlignment:
-                    (data["senderId"] == _firebaseAuth.currentUser!.uid)
-                        ? CrossAxisAlignment.end
-                        : CrossAxisAlignment.start,
-                mainAxisAlignment:
-                    (data["senderId"] == _firebaseAuth.currentUser!.uid)
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                children: [
-                  ChatBubble(
-                    message: data["message"],
-                    receiverId: data["receiverId"],
-                    messageType: data["messageType"],
-                    imageUrl: data["imageUrl"],
-                  ),
-                  Text(
-                    messageTime,
-                    style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
-                  ),
-                ],
-              ),
+      alignment: alignment,
+      child: Padding(
+        padding:
+        const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+        child: Column(
+          crossAxisAlignment:
+          (data["senderId"] == _firebaseAuth.currentUser!.uid)
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
+          mainAxisAlignment:
+          (data["senderId"] == _firebaseAuth.currentUser!.uid)
+              ? MainAxisAlignment.end
+              : MainAxisAlignment.start,
+          children: [
+            ChatBubble(
+              message: data["message"],
+              receiverId: data["receiverId"],
+              messageType: data["messageType"],
+              imageUrl: data["imageUrl"],
             ),
-          )
+            Text(
+              messageTime,
+              style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
+      ),
+    )
         : InkWell(
-            onTap: () {
-              _chatService.viewImage(context, data["imageUrl"]);
-            },
-            child: Container(
-              alignment: alignment,
-              width: 200,
-              height: 235,
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-                child: Column(
-                  crossAxisAlignment:
-                      (data["senderId"] == _firebaseAuth.currentUser!.uid)
-                          ? CrossAxisAlignment.end
-                          : CrossAxisAlignment.start,
-                  mainAxisAlignment:
-                      (data["senderId"] == _firebaseAuth.currentUser!.uid)
-                          ? MainAxisAlignment.end
-                          : MainAxisAlignment.start,
-                  children: [
-                    ChatBubble(
-                      message: data["message"],
-                      receiverId: data["receiverId"],
-                      messageType: data["messageType"],
-                      imageUrl: data["imageUrl"],
-                    ),
-                    Text(
-                      messageTime,
-                      style:
-                          TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
-                    ),
-                  ],
-                ),
+      onTap: () {
+        _chatService.viewImage(context, data["imageUrl"]);
+      },
+      child: Container(
+        alignment: alignment,
+        width: 235,
+        height: 235,
+        child: Padding(
+          padding:
+          const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+          child: Column(
+            crossAxisAlignment:
+            (data["senderId"] == _firebaseAuth.currentUser!.uid)
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.start,
+            mainAxisAlignment:
+            (data["senderId"] == _firebaseAuth.currentUser!.uid)
+                ? MainAxisAlignment.end
+                : MainAxisAlignment.start,
+            children: [
+              ChatBubble(
+                message: data["message"],
+                receiverId: data["receiverId"],
+                messageType: data["messageType"],
+                imageUrl: data["imageUrl"],
               ),
-            ),
-          );
+              Text(
+                messageTime,
+                style:
+                TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildMessageList() {
