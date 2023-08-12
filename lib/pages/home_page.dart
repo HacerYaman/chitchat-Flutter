@@ -123,39 +123,43 @@ class _HomePageState extends State<HomePage> {
     documentSnapshot.data()! as Map<String, dynamic>;
 
     if (_auth.currentUser!.email != data["email"]) {
-      return ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: Image.asset(
-            "lib/assets/default.png",
-            width: 30,
-            height: 30,
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 2),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.white,
+            child: Image.asset(
+              "lib/assets/default.png",
+              width: 30,
+              height: 30,
+            ),
           ),
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(data["username"]),
-            Text(
-              data["bio"],
-              style: TextStyle(
-                fontSize: 12,
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(data["username"]),
+              Text(
+                data["bio"],
+                style: TextStyle(
+                  fontSize: 12,
+                ),
               ),
-            ),
-          ],
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChatPage(
-                receiverUserEmail: data["email"],
-                receiverUserID: data["uid"],
-                receiverUserName: data["username"],
+              Divider()
+            ],
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatPage(
+                  receiverUserEmail: data["email"],
+                  receiverUserID: data["uid"],
+                  receiverUserName: data["username"],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       );
     } else {
       return Container();
