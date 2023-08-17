@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../components/searchbar.dart';
+import '../components/user_listTile.dart';
 
 class RecentChatsPage extends StatefulWidget {
   const RecentChatsPage({super.key});
@@ -134,40 +135,7 @@ class _RecentChatsPageState extends State<RecentChatsPage> {
     Map<String, dynamic> data = documentSnapshot.data()! as Map<String, dynamic>;
 
     if (_auth.currentUser!.email != data["email"]) {
-      return ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: Image.asset(
-            "lib/assets/default.png",
-            width: 30,
-            height: 30,
-          ),
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(data["username"]),
-            Text(
-              data["bio"],
-              style: TextStyle(
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChatPage(
-                receiverUserEmail: data["email"],
-                receiverUserID: data["uid"],
-                receiverUserName: data["username"],
-              ),
-            ),
-          );
-        },
-      );
+      return UserListTile(data: data, context: context);
     } else {
       return Container();
     }

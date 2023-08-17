@@ -35,7 +35,7 @@ class _ChatBubbleState extends State<ChatBubble> {
               child: Text(
                 widget.message,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 13,
                   color: Colors.black,
                 ),
               ),
@@ -67,7 +67,7 @@ class _ChatBubbleState extends State<ChatBubble> {
               child: Text(
                 widget.message,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 13,
                   color: Colors.black,
                 ),
               ),

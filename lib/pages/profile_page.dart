@@ -1,7 +1,6 @@
 import 'package:chitchat/pages/update_profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import '../components/profile_section.dart';
 import 'package:get/get.dart';
@@ -135,7 +134,7 @@ class ProfilePage extends StatelessWidget {
                   );
                 }
               }
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             },
           ),
         ),

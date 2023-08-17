@@ -1,6 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:chitchat/firebase_options.dart';
 import 'package:chitchat/pages/onboarding_page.dart';
+import 'package:chitchat/pages/profile_page.dart';
 import 'package:chitchat/services/auth/auth_gate.dart';
 import 'package:chitchat/services/auth/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,6 +38,10 @@ class MyApp extends StatelessWidget {
     final bool isLogged = currentUser != null;
 
     return GetMaterialApp(
+        routes: {
+          '/profile': (context) => ProfilePage(),
+          // Add more routes here
+        },
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Poppins',

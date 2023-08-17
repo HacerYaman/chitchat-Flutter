@@ -1,4 +1,5 @@
 import 'package:chitchat/components/searchbar.dart';
+import 'package:chitchat/components/user_listTile.dart';
 import 'package:chitchat/pages/profile_page.dart';
 import 'package:chitchat/pages/recent_chats_page.dart';
 import 'package:chitchat/services/auth/auth_service.dart';
@@ -125,41 +126,7 @@ class _HomePageState extends State<HomePage> {
     if (_auth.currentUser!.email != data["email"]) {
       return Padding(
         padding: const EdgeInsets.only(bottom: 2),
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Colors.white,
-            child: Image.asset(
-              "lib/assets/default.png",
-              width: 30,
-              height: 30,
-            ),
-          ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(data["username"]),
-              Text(
-                data["bio"],
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              Divider()
-            ],
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChatPage(
-                  receiverUserEmail: data["email"],
-                  receiverUserID: data["uid"],
-                  receiverUserName: data["username"],
-                ),
-              ),
-            );
-          },
-        ),
+        child: UserListTile(data: data, context: context),
       );
     } else {
       return Container();
