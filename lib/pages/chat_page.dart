@@ -10,15 +10,14 @@ import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ChatPage extends StatefulWidget {
-  final String receiverUserName;
-  final String receiverUserEmail;
-  final String receiverUserID;
+  final String receiverUserName, receiverUserEmail, receiverUserID, receiverURL;
+
 
   const ChatPage(
       {super.key,
       required this.receiverUserEmail,
       required this.receiverUserID,
-      required this.receiverUserName});
+      required this.receiverUserName, required this.receiverURL});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -110,10 +109,14 @@ class _ChatPageState extends State<ChatPage> {
                       Navigator.pop(context);
                     },
                   ),
-                  Image.asset(
-                    "lib/assets/default.png",
-                    width: 30,
-                    height: 30,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.network(
+                      widget.receiverURL,
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   SizedBox(
                     width: 5,

@@ -14,12 +14,13 @@ class UserListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.white,
-        child: Image.asset(
-          "lib/assets/default.png",
-          width: 30,
-          height: 30,
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(100),
+        child: Image.network(
+          data["photoURL"],
+          width: 40,
+          height: 40,
+          fit: BoxFit.cover,
         ),
       ),
       title: Column(
@@ -42,7 +43,7 @@ class UserListTile extends StatelessWidget {
             builder: (context) => ChatPage(
               receiverUserEmail: data["email"],
               receiverUserID: data["uid"],
-              receiverUserName: data["username"],
+              receiverUserName: data["username"], receiverURL: data["photoURL"],
             ),
           ),
         );

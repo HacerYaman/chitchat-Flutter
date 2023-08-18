@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:chitchat/model/get_user_info.dart';
-import 'package:chitchat/services/auth/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -13,45 +16,83 @@ class UpdateProfileScreen extends StatefulWidget {
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
 }
 
+UserService userService= new UserService();
+
+//userService.fetchCurrentUser();
+
+Userr? currentUserrr = UserService.currentUser;
+
+String? new_bio = currentUserrr?.bio,
+    new_userName = currentUserrr?.username,
+    new_password = currentUserrr?.password,
+    new_url= currentUserrr?.photoURL;
+
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  final TextEditingController _bio_controller = TextEditingController();
+  final TextEditingController _userName_controller = TextEditingController();
+  final TextEditingController _password_controller = TextEditingController();
+
+  void _saveChanges() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        if (_userName_controller.toString().isEmpty) {
+          SnackBar(content: Text("Username cannot be empty"));
+          print("Username cannot be empty");
+        } else {
+          final userDocRef = _firestore.collection('users').doc(user.uid);
+          await userDocRef.update({
+            'bio': new_bio,
+            "username": new_userName,
+            "password": new_password,
+            "photoURL": new_url,
+          });
+          Navigator.popAndPushNamed(context, '/profile');
+        }
+      }
+    } catch (e) {
+      print("Error updating profile: $e");
+    }
+  }
+
+//-----
+
+  File? imageFile;
+
+  Future getImage() async {
+    ImagePicker _picker = ImagePicker();
+    await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
+      if (xFile != null) {
+        imageFile = File(xFile.path);
+        uploadImage();
+      }
+    });
+  }
+
+  Future uploadImage() async {
+    // Future<String> uploadImage() async {
+    String fileName = Uuid().v1();
+    var ref =
+    FirebaseStorage.instance.ref().child("images").child("$fileName.jpg");
+    var uploadTask = await ref.putFile(imageFile!);
+    String imageUrl = await uploadTask.ref.getDownloadURL();
+    print(imageUrl);
+
+    new_url=imageUrl;
+
+    imageUrl = "";
+    imageFile = null;
+  }
+
+  //---------------------------------------
+
+
   @override
   Widget build(BuildContext context) {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-    final TextEditingController _bio_controller = TextEditingController();
-    final TextEditingController _userName_controller = TextEditingController();
-    final TextEditingController _password_controller = TextEditingController();
-
-    UserService().fetchCurrentUser();
-    Userr? currentUser = UserService.currentUser;
-
-    String? new_bio = currentUser?.bio,
-        new_userName = currentUser?.username,
-        new_password = currentUser?.password;
-
-    void _saveChanges() async {
-      try {
-        final user = _auth.currentUser;
-        if (user != null) {
-          if (_userName_controller.toString().isEmpty) {
-            SnackBar(content: Text("Username cannot be empty"));
-            print("Username cannot be empty");
-          } else {
-            final userDocRef = _firestore.collection('users').doc(user.uid);
-            await userDocRef.update({
-              'bio': new_bio,
-              "username": new_userName,
-              "password": new_password,
-            });
-            Navigator.popAndPushNamed(context, '/profile');
-          }
-        }
-      } catch (e) {
-        print("Error updating profile: $e");
-      }
-    }
-
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SingleChildScrollView(
@@ -77,7 +118,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(100),
                               child: Image.network(
+
                                 currentUser.photoURL,
+
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -92,10 +135,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 borderRadius: BorderRadius.circular(100),
                                 color: Colors.amber,
                               ),
-                              child: Icon(
-                                Icons.edit,
-                                color: Colors.black,
-                                size: 20,
+                              child: IconButton(
+                                onPressed: () {
+                                  getImage();
+                                },
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
                               ),
                             ),
                           )
