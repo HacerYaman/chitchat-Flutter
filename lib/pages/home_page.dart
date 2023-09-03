@@ -43,8 +43,6 @@ class _HomePageState extends State<HomePage> {
     return ProfilePage();
   }
 
-//--------------
-/*
   storeNotificationToken() async {
     String? token = await FirebaseMessaging.instance.getToken();
     FirebaseFirestore.instance
@@ -65,42 +63,7 @@ class _HomePageState extends State<HomePage> {
     });
     storeNotificationToken();
   }
-    sendNotification(String title, String token)async{
 
-      final data = {
-        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-        'id': '1',
-        'status': 'done',
-        'message': title,
-      };
-
-      try{
-        http.Response response = await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),headers: <String,String>{
-          'Content-Type': 'application/json',
-          'Authorization': 'key=AAAArjUzo-Y:APA91bGBS5WEZQjTZ70MHhlUpbngVUwQ1wFPS7KfN6RTQiqt-nRuI6SGa3s3wsoSNFl8JeQKKpC1aR1_kA4hPee45w2VEdcRQ_yO2K7Ok5mYWWABEkAp4A4kLui5zrAQUM-_410iqllc'
-        },
-            body: jsonEncode(<String,dynamic>{
-              'notification': <String,dynamic> {'title': title,'body': 'You are followed by someone'},
-              'priority': 'high',
-              'data': data,
-              'to': '$token'
-            })
-        );
-
-
-        if(response.statusCode == 200){
-          print("Yeh notificatin is sended");
-        }else{
-          print("Error");
-        }
-
-      }catch(e){
-
-      }
-    }
-  }
-
-//------*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
