@@ -45,87 +45,89 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 15,
-                ),
-                Image.asset(
-                  "lib/assets/ccicon.png",
-                  width: 100,
-                  height: 100,
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  "Let's create an account for you! ❤️",
-                  style: TextStyle(
-                    fontSize: 16,
+        child: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 15,
                   ),
-                ),
-                SizedBox(height: 15),
-                MyTextField(
-                    controller: usernameController,
-                    hintText: "user name",
-                    obscureText: false),
-                SizedBox(
-                  height: 15,
-                ),
-                MyTextField(
-                    controller: emailController,
-                    hintText: "email",
-                    obscureText: false),
-                SizedBox(
-                  height: 15,
-                ),
-                MyTextField(
-                    controller: passwordController,
-                    hintText: "password",
-                    obscureText: true),
-                SizedBox(
-                  height: 15,
-                ),
-                MyTextField(
-                    controller: confirmPasswordController,
-                    hintText: "confirm password",
-                    obscureText: true),
-                SizedBox(
-                  height: 15,
-                ),
-                MyButton(
-                  buttonText: "Sign Up",
-                  onTap: signUp,
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Already a member?",
-                      style: TextStyle(),
+                  Image.asset(
+                    "lib/assets/ccicon.png",
+                    width: 100,
+                    height: 100,
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    "Let's create an account for you! ❤️",
+                    style: TextStyle(
+                      fontSize: 16,
                     ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: Text(
-                        "Sign in",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
+                  ),
+                  SizedBox(height: 15),
+                  MyTextField(
+                      controller: usernameController,
+                      hintText: "user name",
+                      obscureText: false),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  MyTextField(
+                      controller: emailController,
+                      hintText: "email",
+                      obscureText: false),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  MyTextField(
+                      controller: passwordController,
+                      hintText: "password",
+                      obscureText: true),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  MyTextField(
+                      controller: confirmPasswordController,
+                      hintText: "confirm password",
+                      obscureText: true),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  MyButton(
+                    buttonText: "Sign Up",
+                    onTap: signUp,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Already a member?",
+                        style: TextStyle(),
                       ),
-                    )
-                  ],
-                ),
-              ],
+                      SizedBox(
+                        width: 4,
+                      ),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: Text(
+                          "Sign in",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

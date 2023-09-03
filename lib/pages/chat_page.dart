@@ -178,11 +178,6 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
-    }
-
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SafeArea(
@@ -223,6 +218,15 @@ class _ChatPageState extends State<ChatPage> {
                       color: Colors.black,
                       fontSize: 18,
                     ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.arrow_drop_down_circle_outlined),
+                    onPressed: () {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _scrollController
+                            .jumpTo(_scrollController.position.maxScrollExtent);
+                      });
+                    },
                   ),
                 ],
               ),
