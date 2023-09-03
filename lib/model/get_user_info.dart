@@ -8,6 +8,7 @@ class Userr {
   final String photoURL;
   final String uid;
   final String username;
+  final String fcmToken;
 
   Userr({
     required this.bio,
@@ -16,6 +17,7 @@ class Userr {
     required this.username,
     required this.email,
     required this.photoURL,
+    required this.fcmToken,
   });
 }
 
@@ -39,6 +41,7 @@ class UserService {
     final password = data['password'].toString();
     final uid = data['uid'].toString();
     final photoURL = data['photoURL'].toString();
+    final fcmToken = data["fcmToken"].toString();
 
     currentUser = Userr(
       uid: uid,
@@ -47,6 +50,7 @@ class UserService {
       photoURL: photoURL,
       bio: bio,
       password: password,
+      fcmToken: fcmToken,
     );
   }
 }

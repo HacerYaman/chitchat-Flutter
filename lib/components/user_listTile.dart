@@ -43,7 +43,9 @@ class UserListTile extends StatelessWidget {
             builder: (context) => ChatPage(
               receiverUserEmail: data["email"],
               receiverUserID: data["uid"],
-              receiverUserName: data["username"], receiverURL: data["photoURL"],
+              receiverUserName: data["username"],
+              receiverURL: data["photoURL"],
+              receiverToken: data['fcmToken'],
             ),
           ),
         );

@@ -1,11 +1,16 @@
+import 'dart:convert';
+
 import 'package:chitchat/components/searchbar.dart';
 import 'package:chitchat/components/user_listTile.dart';
 import 'package:chitchat/pages/profile_page.dart';
 import 'package:chitchat/pages/recent_chats_page.dart';
 import 'package:chitchat/services/auth/auth_service.dart';
+import 'package:chitchat/services/local_push_notification.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'chat_page.dart';
@@ -38,6 +43,64 @@ class _HomePageState extends State<HomePage> {
     return ProfilePage();
   }
 
+//--------------
+/*
+  storeNotificationToken() async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .set({
+      "fcmToken": token,
+    }, SetOptions(merge: true));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((event) {
+      LocalNotificationService.display(event);
+    });
+    storeNotificationToken();
+  }
+    sendNotification(String title, String token)async{
+
+      final data = {
+        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+        'id': '1',
+        'status': 'done',
+        'message': title,
+      };
+
+      try{
+        http.Response response = await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),headers: <String,String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'key=AAAArjUzo-Y:APA91bGBS5WEZQjTZ70MHhlUpbngVUwQ1wFPS7KfN6RTQiqt-nRuI6SGa3s3wsoSNFl8JeQKKpC1aR1_kA4hPee45w2VEdcRQ_yO2K7Ok5mYWWABEkAp4A4kLui5zrAQUM-_410iqllc'
+        },
+            body: jsonEncode(<String,dynamic>{
+              'notification': <String,dynamic> {'title': title,'body': 'You are followed by someone'},
+              'priority': 'high',
+              'data': data,
+              'to': '$token'
+            })
+        );
+
+
+        if(response.statusCode == 200){
+          print("Yeh notificatin is sended");
+        }else{
+          print("Error");
+        }
+
+      }catch(e){
+
+      }
+    }
+  }
+
+//------*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,7 +184,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildUserListItem(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic> data =
-    documentSnapshot.data()! as Map<String, dynamic>;
+        documentSnapshot.data()! as Map<String, dynamic>;
 
     if (_auth.currentUser!.email != data["email"]) {
       return Padding(

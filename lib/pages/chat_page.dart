@@ -1,23 +1,34 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:chitchat/components/chat_bubble.dart';
+import 'package:chitchat/model/get_user_info.dart';
 import 'package:chitchat/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class ChatPage extends StatefulWidget {
-  final String receiverUserName, receiverUserEmail, receiverUserID, receiverURL;
+import '../services/local_push_notification.dart';
 
+class ChatPage extends StatefulWidget {
+  final String receiverUserName,
+      receiverUserEmail,
+      receiverUserID,
+      receiverURL,
+      receiverToken;
 
   const ChatPage(
       {super.key,
       required this.receiverUserEmail,
       required this.receiverUserID,
-      required this.receiverUserName, required this.receiverURL});
+      required this.receiverUserName,
+      required this.receiverURL,
+      required this.receiverToken});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -28,7 +39,7 @@ class _ChatPageState extends State<ChatPage> {
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+  ScrollController _scrollController = ScrollController();
   final Uuid uuid = Uuid();
 
   void sendMessage() async {
@@ -37,7 +48,7 @@ class _ChatPageState extends State<ChatPage> {
 
       if (imageFile != null) {
         imageUrl = await uploadImage();
-        imageFile = null; // Resim dosyasını sıfırla
+        imageFile = null;
       }
 
       await _chatService.sendMessage(
@@ -45,9 +56,15 @@ class _ChatPageState extends State<ChatPage> {
         _messageController.text,
         imageUrl,
       );
-
       _messageController.clear();
-      imageUrl = ''; // URL'yi sıfırla
+      imageUrl = '';
+
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+      sendNotification("boş", widget.receiverToken);
     }
   }
 
@@ -63,6 +80,49 @@ class _ChatPageState extends State<ChatPage> {
       }
     });
   }
+
+  /* Future getImage() async {
+    ImagePicker _picker = ImagePicker();
+    await _picker.pickImage(source: ImageSource.gallery).then((xFile) async {
+      if (xFile != null) {
+        File originalImage = File(xFile.path);
+        CroppedFile? croppedImage = await _cropImage(originalImage);
+        if (croppedImage != null) {
+          setState(() {
+            imageFile = croppedImage;
+          });
+        }
+      }
+    });
+  }*/
+
+  /*Future<File?> _cropImage(File imageFile) async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: imageFile.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio3x2,
+        CropAspectRatioPreset.original,
+        CropAspectRatioPreset.ratio4x3,
+        CropAspectRatioPreset.ratio16x9
+      ],
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Crop Your Image',
+            toolbarColor: Colors.amber,
+            toolbarWidgetColor: Colors.black,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        IOSUiSettings(
+          title: 'Crop Your Image',
+        ),
+        WebUiSettings(
+          context: context,
+        ),
+      ],
+    );
+    return File(croppedFile.path);
+  }*/
 
   Future uploadImage() async {
     // Future<String> uploadImage() async {
@@ -85,8 +145,74 @@ class _ChatPageState extends State<ChatPage> {
 
   //---------------------------------------
 
+  storeNotificationToken() async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .set({
+      "fcmToken": token,
+    }, SetOptions(merge: true));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((event) {
+      LocalNotificationService.display(event);
+    });
+    storeNotificationToken();
+  }
+
+  sendNotification(String message, String token) async {
+    Userr? currentU = UserService.currentUser;
+    String? username = currentU?.username;
+
+    final data = {
+      'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+      'id': '1',
+      'status': 'done',
+      'message': "username",
+    };
+
+    try {
+      http.Response response =
+          await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+              headers: <String, String>{
+                'Content-Type': 'application/json',
+                'Authorization':
+                    'key=AAAArjUzo-Y:APA91bGBS5WEZQjTZ70MHhlUpbngVUwQ1wFPS7KfN6RTQiqt-nRuI6SGa3s3wsoSNFl8JeQKKpC1aR1_kA4hPee45w2VEdcRQ_yO2K7Ok5mYWWABEkAp4A4kLui5zrAQUM-_410iqllc'
+              },
+              body: jsonEncode(<String, dynamic>{
+                'notification': <String, dynamic>{
+                  'title': "username",
+                  'body': 'bildirim içeriği'
+                },
+                'priority': 'high',
+                'data': data,
+                'to': '$token'
+              }));
+
+      if (response.statusCode == 200) {
+        print("notificatin is sended");
+      } else {
+        print("Error");
+      }
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
+    /*_scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 200), curve: Curves.easeInOut);*/
+
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+    }
+
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SafeArea(
@@ -163,7 +289,7 @@ class _ChatPageState extends State<ChatPage> {
                         topLeft: Radius.circular(16),
                         topRight: Radius.circular(16))),
                 focusedBorder: OutlineInputBorder(
-                    //text yazmaya başladığındaki hali kutunun
+                  //text yazmaya başladığındaki hali kutunun
                     borderSide: BorderSide(
                       color: Colors.white,
                     ),
@@ -185,7 +311,11 @@ class _ChatPageState extends State<ChatPage> {
             icon: Icon(Icons.photo),
           ),
           IconButton(
-            onPressed: sendMessage,
+            onPressed: //sendMessage,
+                //sendNotification( _messageController.text, widget.receiverToken,),
+                () {
+              sendMessage();
+            },
             icon: Icon(Icons.arrow_forward_ios),
           )
         ],
@@ -201,75 +331,75 @@ class _ChatPageState extends State<ChatPage> {
         : Alignment.centerLeft;
 
     var messageTime =
-        DateFormat('dd/MM HH:mm').format(data["timeStamp"].toDate());
+    DateFormat('dd/MM HH:mm').format(data["timeStamp"].toDate());
 
     return data["messageType"] == "text"
         ? Container(
-            alignment: alignment,
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-              child: Column(
-                crossAxisAlignment:
-                    (data["senderId"] == _firebaseAuth.currentUser!.uid)
-                        ? CrossAxisAlignment.end
-                        : CrossAxisAlignment.start,
-                mainAxisAlignment:
-                    (data["senderId"] == _firebaseAuth.currentUser!.uid)
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                children: [
-                  ChatBubble(
-                    message: data["message"],
-                    receiverId: data["receiverId"],
-                    messageType: data["messageType"],
-                    imageUrl: data["imageUrl"],
-                  ),
-                  Text(
-                    messageTime,
-                    style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
-                  ),
-                ],
-              ),
+      alignment: alignment,
+      child: Padding(
+        padding:
+        const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+        child: Column(
+          crossAxisAlignment:
+          (data["senderId"] == _firebaseAuth.currentUser!.uid)
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
+          mainAxisAlignment:
+          (data["senderId"] == _firebaseAuth.currentUser!.uid)
+              ? MainAxisAlignment.end
+              : MainAxisAlignment.start,
+          children: [
+            ChatBubble(
+              message: data["message"],
+              receiverId: data["receiverId"],
+              messageType: data["messageType"],
+              imageUrl: data["imageUrl"],
             ),
-          )
+            Text(
+              messageTime,
+              style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
+      ),
+    )
         : InkWell(
-            onTap: () {
-              _chatService.viewImage(context, data["imageUrl"]);
-            },
-            child: Container(
-              alignment: alignment,
-              width: 235,
-              height: 235,
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-                child: Column(
-                  crossAxisAlignment:
-                      (data["senderId"] == _firebaseAuth.currentUser!.uid)
-                          ? CrossAxisAlignment.end
-                          : CrossAxisAlignment.start,
-                  mainAxisAlignment:
-                      (data["senderId"] == _firebaseAuth.currentUser!.uid)
-                          ? MainAxisAlignment.end
-                          : MainAxisAlignment.start,
-                  children: [
-                    ChatBubble(
-                      message: data["message"],
-                      receiverId: data["receiverId"],
-                      messageType: data["messageType"],
-                      imageUrl: data["imageUrl"],
-                    ),
-                    Text(
-                      messageTime,
-                      style:
-                          TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
-                    ),
-                  ],
-                ),
+      onTap: () {
+        _chatService.viewImage(context, data["imageUrl"]);
+      },
+      child: Container(
+        alignment: alignment,
+        width: 235,
+        height: 235,
+        child: Padding(
+          padding:
+          const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+          child: Column(
+            crossAxisAlignment:
+            (data["senderId"] == _firebaseAuth.currentUser!.uid)
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.start,
+            mainAxisAlignment:
+            (data["senderId"] == _firebaseAuth.currentUser!.uid)
+                ? MainAxisAlignment.end
+                : MainAxisAlignment.start,
+            children: [
+              ChatBubble(
+                message: data["message"],
+                receiverId: data["receiverId"],
+                messageType: data["messageType"],
+                imageUrl: data["imageUrl"],
               ),
-            ),
-          );
+              Text(
+                messageTime,
+                style:
+                TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildMessageList() {
@@ -284,6 +414,7 @@ class _ChatPageState extends State<ChatPage> {
           return CircularProgressIndicator();
         }
         return ListView(
+          controller: _scrollController,
           children: snapshot.data!.docs
               .map((document) => _buildMessageItem(document))
               .toList(),

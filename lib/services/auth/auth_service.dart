@@ -40,6 +40,7 @@ class AuthService extends ChangeNotifier {
         "username": userName,
         'photoURL': defaultPhotoURL,
         "bio": defaultBio,
+        "fcmToken": "",
       });
 
       return userCredential;

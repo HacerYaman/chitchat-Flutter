@@ -4,6 +4,7 @@ import 'package:chitchat/pages/onboarding_page.dart';
 import 'package:chitchat/pages/profile_page.dart';
 import 'package:chitchat/services/auth/auth_gate.dart';
 import 'package:chitchat/services/auth/auth_service.dart';
+import 'package:chitchat/services/local_push_notification.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseApi().initNotifications();
+  LocalNotificationService.initialize();
 
   runApp(ChangeNotifierProvider(
     create: (context) => AuthService(),
