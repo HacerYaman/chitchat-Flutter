@@ -2,6 +2,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:chitchat/firebase_options.dart';
 import 'package:chitchat/pages/onboarding_page.dart';
 import 'package:chitchat/pages/profile_page.dart';
+import 'package:chitchat/pages/update_profile_page.dart';
 import 'package:chitchat/services/auth/auth_gate.dart';
 import 'package:chitchat/services/auth/auth_service.dart';
 import 'package:chitchat/services/local_push_notification.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    userService.fetchCurrentUser();
 
     final User? currentUser = _auth.currentUser;
     final bool isLogged = currentUser != null;

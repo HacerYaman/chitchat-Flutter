@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:chitchat/components/searchbar.dart';
 import 'package:chitchat/components/user_listTile.dart';
 import 'package:chitchat/pages/profile_page.dart';
@@ -10,10 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'chat_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

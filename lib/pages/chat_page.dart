@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:chitchat/components/chat_bubble.dart';
-import 'package:chitchat/model/get_user_info.dart';
 import 'package:chitchat/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import '../services/local_push_notification.dart';
+import '../model/get_user_info.dart';
 
 class ChatPage extends StatefulWidget {
   final String receiverUserName,
@@ -54,7 +53,6 @@ class _ChatPageState extends State<ChatPage> {
         _messageController.text,
         imageUrl,
       );
-      _messageController.clear();
       imageUrl = '';
 
       _scrollController.animateTo(
@@ -62,7 +60,8 @@ class _ChatPageState extends State<ChatPage> {
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
-      sendNotification("boş", widget.receiverToken);
+      sendNotification(_messageController.text, widget.receiverToken);
+      _messageController.clear();
     }
   }
 
@@ -141,15 +140,14 @@ class _ChatPageState extends State<ChatPage> {
   //---------------------------------------
 
   sendNotification(String message, String token) async {
-    Userr? currentU = UserService.currentUser;
-    String? username = currentU?.username;
-
     final data = {
       'click_action': 'FLUTTER_NOTIFICATION_CLICK',
       'id': '1',
       'status': 'done',
-      'message': "username",
+      'title': UserService.currentUser?.username,
+      'body': message,
     };
+
     try {
       http.Response response =
           await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
@@ -160,8 +158,8 @@ class _ChatPageState extends State<ChatPage> {
               },
               body: jsonEncode(<String, dynamic>{
                 'notification': <String, dynamic>{
-                  'title': "username",
-                  'body': 'bildirim içeriği'
+                  'title': UserService.currentUser?.username,
+                  'body': _messageController.text
                 },
                 'priority': 'high',
                 'data': data,
@@ -169,11 +167,13 @@ class _ChatPageState extends State<ChatPage> {
               }));
 
       if (response.statusCode == 200) {
-        print("notificatin is sended");
+        print("notification is sent");
       } else {
         print("Error");
       }
-    } catch (e) {}
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 
   @override

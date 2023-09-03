@@ -26,7 +26,7 @@ class UserService {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  Future<void> fetchCurrentUser() async {
+  Future<String> fetchCurrentUser() async {
     final currentUserUID = _firebaseAuth.currentUser?.uid;
 
     final DocumentSnapshot snapshot = await FirebaseFirestore.instance
@@ -52,5 +52,7 @@ class UserService {
       password: password,
       fcmToken: fcmToken,
     );
+
+    return username;
   }
 }
