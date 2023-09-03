@@ -351,15 +351,16 @@ class _ChatPageState extends State<ChatPage> {
           children: [
             ChatBubble(
               message: data["message"],
-              receiverId: data["receiverId"],
-              messageType: data["messageType"],
-              imageUrl: data["imageUrl"],
-            ),
-            Text(
+                    receiverId: data["receiverId"],
+                    messageType: data["messageType"],
+                    imageUrl: data["imageUrl"],
+                    timeStamp: messageTime,
+                  ),
+            /*Text(
               messageTime,
               style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
-            ),
-          ],
+            ),*/
+                ],
         ),
       ),
     )
@@ -386,10 +387,11 @@ class _ChatPageState extends State<ChatPage> {
             children: [
               ChatBubble(
                 message: data["message"],
-                receiverId: data["receiverId"],
-                messageType: data["messageType"],
-                imageUrl: data["imageUrl"],
-              ),
+                      receiverId: data["receiverId"],
+                      messageType: data["messageType"],
+                      imageUrl: data["imageUrl"],
+                      timeStamp: messageTime,
+                    ),
               Text(
                 messageTime,
                 style:

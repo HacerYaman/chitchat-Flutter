@@ -2,14 +2,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatBubble extends StatefulWidget {
+  final String timeStamp;
   final String message;
   final String receiverId;
   final String messageType;
   final String imageUrl;
+
   const ChatBubble({
     super.key,
     required this.message,
-    required this.receiverId, required this.messageType, required this.imageUrl,
+    required this.receiverId,
+    required this.messageType,
+    required this.imageUrl,
+    required this.timeStamp,
   });
 
   @override
@@ -31,13 +36,25 @@ class _ChatBubbleState extends State<ChatBubble> {
         child: Column(
           children: [
             Visibility(
-              visible: widget.messageType=="image"? false :true,
-              child: Text(
-                widget.message,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.black,
-                ),
+              visible: widget.messageType == "image" ? false : true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.message,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    widget.timeStamp,
+                    style: TextStyle(
+                        fontSize: 8,
+                        color: Colors.black,
+                        fontStyle: FontStyle.italic),
+                  ),
+                ],
               ),
             ),
             Visibility(
@@ -63,13 +80,26 @@ class _ChatBubbleState extends State<ChatBubble> {
         child: Column(
           children: [
             Visibility(
-              visible: widget.messageType=="image"? false :true,
-              child: Text(
-                widget.message,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.black,
-                ),
+              visible: widget.messageType == "image" ? false : true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    widget.message,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  Text(
+                    widget.timeStamp,
+                    style: TextStyle(
+                        fontSize: 8,
+                        color: Colors.black,
+                        fontStyle: FontStyle.italic),
+                  ),
+                ],
               ),
             ),
             Visibility(
