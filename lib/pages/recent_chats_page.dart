@@ -1,9 +1,7 @@
-import 'package:chitchat/pages/chat_page.dart';
 import 'package:chitchat/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../components/searchbar.dart';
 import '../components/user_listTile.dart';
 
@@ -23,7 +21,7 @@ class _RecentChatsPageState extends State<RecentChatsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: _buildUserList(),
     );
   }
@@ -64,15 +62,15 @@ class _RecentChatsPageState extends State<RecentChatsPage> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             height: 56,
             decoration: BoxDecoration(
-              color: Colors.amber,
-              borderRadius: BorderRadius.vertical(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: const BorderRadius.vertical(
                 bottom: Radius.circular(15),
               ),
             ),
-            child: Row(
+            child: const Row(
               children: [
                 Text(
                   "Recent Chats",
@@ -90,7 +88,7 @@ class _RecentChatsPageState extends State<RecentChatsPage> {
               future: _chatService.getRecentChats(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 } else if (snapshot.hasError) {
@@ -110,9 +108,9 @@ class _RecentChatsPageState extends State<RecentChatsPage> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return SizedBox();
+                            return const SizedBox();
                           } else if (snapshot.hasError) {
-                            return SizedBox();
+                            return const SizedBox();
                           } else {
                             DocumentSnapshot documentSnapshot =
                             snapshot.data!;

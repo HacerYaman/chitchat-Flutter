@@ -1,4 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:chitchat/constants/theme/theme_provider.dart';
 import 'package:chitchat/firebase_options.dart';
 import 'package:chitchat/pages/onboarding_page.dart';
 import 'package:chitchat/pages/profile_page.dart';
@@ -11,11 +12,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
-
 import 'api/firebase_api.dart';
 
-final navigatorKey= GlobalKey<NavigatorState>(); //for navigation purposses
-
+final navigatorKey = GlobalKey<NavigatorState>(); //for navigation purposses
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,8 +22,11 @@ void main() async {
   await FirebaseApi().initNotifications();
   LocalNotificationService.initialize();
 
-  runApp(ChangeNotifierProvider(
-    create: (context) => AuthService(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
+      ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
+    ],
     child: MyApp(),
   ));
 }
@@ -41,21 +43,22 @@ class MyApp extends StatelessWidget {
     final User? currentUser = _auth.currentUser;
     final bool isLogged = currentUser != null;
 
+    Provider.of<ThemeProvider>(context, listen: false).loadThemeMode();
+
     return GetMaterialApp(
         routes: {
           '/profile': (context) => ProfilePage(),
           // Add more routes here
         },
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: 'Poppins',
-        ),
+        theme: Provider.of<ThemeProvider>(context).themeData,
         home: AnimatedSplashScreen(
-            duration: 3000,
+            duration: 2000,
             splash: Image.asset("lib/assets/ccicon.png"),
             splashIconSize: 200,
-            nextScreen: isLogged ? AuthGate() : OnboardingPage(),
+            nextScreen: isLogged ? const AuthGate() : const OnboardingPage(),
             splashTransition: SplashTransition.fadeTransition,
-            backgroundColor: Colors.white));
+            backgroundColor: Colors.white),
+    );
   }
 }

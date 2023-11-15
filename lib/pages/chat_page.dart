@@ -10,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import '../model/get_user_info.dart';
 
 class ChatPage extends StatefulWidget {
@@ -37,7 +36,7 @@ class _ChatPageState extends State<ChatPage> {
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   ScrollController _scrollController = ScrollController();
-  final Uuid uuid = Uuid();
+  final Uuid uuid = const Uuid();
 
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
@@ -57,7 +56,7 @@ class _ChatPageState extends State<ChatPage> {
 
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
       sendNotification(_messageController.text, widget.receiverToken);
@@ -122,7 +121,7 @@ class _ChatPageState extends State<ChatPage> {
   }*/
 
   Future uploadImage() async {
-    String fileName = Uuid().v1();
+    String fileName = const Uuid().v1();
     var ref =
         FirebaseStorage.instance.ref().child("images").child("$fileName.jpg");
     var uploadTask = await ref.putFile(imageFile!);
@@ -179,23 +178,23 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               height: 56,
               decoration: BoxDecoration(
-                color: Colors.amber,
-                borderRadius: BorderRadius.vertical(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: const BorderRadius.vertical(
                   bottom: Radius.circular(15),
                 ),
               ),
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -209,18 +208,18 @@ class _ChatPageState extends State<ChatPage> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   Text(
                     widget.receiverUserName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 18,
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.arrow_drop_down_circle_outlined),
+                    icon: const Icon(Icons.arrow_drop_down_circle_outlined),
                     onPressed: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         _scrollController
@@ -245,8 +244,8 @@ class _ChatPageState extends State<ChatPage> {
     //mesaj barı
     return Container(
       height: 50,
-      decoration: BoxDecoration(
-          color: Colors.white,
+      decoration:  BoxDecoration(
+          color: Theme.of(context).colorScheme.onTertiary,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(16), topRight: Radius.circular(16))),
       child: Row(
@@ -257,23 +256,23 @@ class _ChatPageState extends State<ChatPage> {
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Colors.grey.shade200,
+                      color: Theme.of(context).colorScheme.onTertiary,
                     ),
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(16),
                         topRight: Radius.circular(16))),
-                focusedBorder: OutlineInputBorder(
+                focusedBorder:  OutlineInputBorder(
                     //text yazmaya başladığındaki hali kutunun
                     borderSide: BorderSide(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onTertiary,
                     ),
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(16),
                         topRight: Radius.circular(16))),
-                fillColor: Colors.white,
+                fillColor: Theme.of(context).colorScheme.onTertiary,
                 filled: true,
                 hintText: "Enter message",
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   fontSize: 13,
                   color: Colors.grey,
                 ),
@@ -282,13 +281,13 @@ class _ChatPageState extends State<ChatPage> {
           ),
           IconButton(
             onPressed: getImage,
-            icon: Icon(Icons.photo),
+            icon:  const Icon(Icons.photo, color: Colors.black),
           ),
           IconButton(
             onPressed: () {
               sendMessage();
             },
-            icon: Icon(Icons.arrow_forward_ios),
+            icon: const Icon(Icons.arrow_forward_ios, color: Colors.black,),
           )
         ],
       ),
@@ -363,7 +362,7 @@ class _ChatPageState extends State<ChatPage> {
                     Text(
                       messageTime,
                       style:
-                          TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
+                          const TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
                     ),
                   ],
                 ),
@@ -381,7 +380,7 @@ class _ChatPageState extends State<ChatPage> {
           return Text("error${snapshot.error}");
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         return ListView(
           controller: _scrollController,

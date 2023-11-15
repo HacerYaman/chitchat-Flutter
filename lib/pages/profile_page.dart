@@ -1,12 +1,12 @@
-import 'package:chitchat/api/firebase_api.dart';
+import 'package:chitchat/constants/theme/theme_provider.dart';
 import 'package:chitchat/pages/update_profile_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../components/profile_section.dart';
 import 'package:get/get.dart';
-
+import '../constants/theme/color_scheme.dart';
 import '../services/auth/auth_service.dart';
 import '../model/get_user_info.dart';
 
@@ -30,21 +30,23 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  void signOut() {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    authService.signOut();
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
 
-    void signOut() {
-      final authService = Provider.of<AuthService>(context, listen: false);
-      authService.signOut();
-    }
+    Provider.of<ThemeProvider>(context, listen: false).loadThemeMode();
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: FutureBuilder<void>(
               future: UserService().fetchCurrentUser(),
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
@@ -54,8 +56,18 @@ class _ProfilePageState extends State<ProfilePage> {
                   if (currentUser != null) {
                     return Column(
                       children: [
-                        SizedBox(
-                          height: 10,
+                        Row(
+                          children: [
+                            const Icon(Icons.sunny),
+                            CupertinoSwitch(
+                              value: Provider.of<ThemeProvider>(context,).themeMode,
+                              activeColor: AppColors.blueGreyColor,
+                              onChanged: (value) {
+                                Provider.of<ThemeProvider>(context, listen: false).themeChanged();
+                              },
+                            ),
+                            const Icon(Icons.dark_mode),
+                          ],
                         ),
                         SizedBox(
                           width: 120,
@@ -68,24 +80,24 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
                           currentUser.username,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
                           currentUser.email,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Padding(
@@ -93,7 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Container(
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: Colors.black,
+                                color: Theme.of(context).colorScheme.tertiary,
                                 width: 1.0,
                               ),
                               borderRadius: BorderRadius.circular(8.0),
@@ -102,60 +114,61 @@ class _ProfilePageState extends State<ProfilePage> {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 currentUser.bio,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         SizedBox(
                           width: 200,
                           child: ElevatedButton(
                             onPressed: () =>
-                                Get.to(() => UpdateProfileScreen()),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
+                                Get.to(() => const UpdateProfileScreen()),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.tertiary,
+                              side: BorderSide.none,
+                              shape: const StadiumBorder(),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(10.0),
                               child: Text(
                                 "Edit Profile",
                                 style: TextStyle(fontSize: 16),
                               ),
                             ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              side: BorderSide.none,
-                              shape: StadiumBorder(),
-                            ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Divider(),
-                        SizedBox(
+                        const Divider(),
+                        const SizedBox(
                           height: 10,
                         ),
                         GestureDetector(
-                          child: ProfileSection(
+                          child: const ProfileSection(
                             title: 'User Management',
                             icon: Icons.person,
                           ),
                         ),
                         InkWell(
-                          child: ProfileSection(
+                          onTap: signOut,
+                          child: const ProfileSection(
                             title: 'Log out',
                             icon: Icons.logout,
                           ),
-                          onTap: signOut,
                         ),
                       ],
                     );
                   }
                 }
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               },
             ),
           ),
@@ -167,7 +180,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
 class FirebaseApiii {
   final _firebaseMessaging = FirebaseMessaging.instance;
-
   Future<String?> initNotifications() async {
     await _firebaseMessaging.requestPermission();
     final fcmToken = await _firebaseMessaging.getToken();

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../constants/theme/color_scheme.dart';
 
 class ChatBubble extends StatefulWidget {
   final String timeStamp;
@@ -28,10 +29,10 @@ class _ChatBubbleState extends State<ChatBubble> {
   Widget build(BuildContext context) {
     if (_firebaseAuth.currentUser!.uid == widget.receiverId) {
       return Container(   //GELEN MESAJ
-        padding: EdgeInsets.only(left: 10,right: 10,top:8, bottom: 8),
+        padding: const EdgeInsets.only(left: 10,right: 10,top:8, bottom: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
+          color: AppColors.gettedMsg,
         ),
         child: Column(
           children: [
@@ -42,14 +43,14 @@ class _ChatBubbleState extends State<ChatBubble> {
                 children: [
                   Text(
                     widget.message,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 13,
                       color: Colors.black,
                     ),
                   ),
                   Text(
                     widget.timeStamp,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 8,
                         color: Colors.black,
                         fontStyle: FontStyle.italic),
@@ -72,10 +73,10 @@ class _ChatBubbleState extends State<ChatBubble> {
     } else {
       return Container(
         //GÖNDERİLEN MESAJ
-        padding: EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+        padding: const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.amber.shade300,
+          color: Theme.of(context).colorScheme.secondary,
         ),
         child: Column(
           children: [
@@ -86,7 +87,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                 children: [
                   Text(
                     widget.message,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 13,
                       color: Colors.black,
                     ),
@@ -94,7 +95,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                   ),
                   Text(
                     widget.timeStamp,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 8,
                         color: Colors.black,
                         fontStyle: FontStyle.italic),

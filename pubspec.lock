@@ -632,14 +632,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
-  shared_preferences:
-    dependency: transitive
+  responsive_sizer:
+    dependency: "direct main"
     description:
-      name: shared_preferences
-      sha256: "0344316c947ffeb3a529eac929e1978fcd37c26be4e8468628bac399365a3ca1"
+      name: responsive_sizer
+      sha256: "206d1f77f65ed8394ef2a526583e38e874ee36f036f3fe9aefb0f58ecba9bef9"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "3.2.0"
+  shared_preferences:
+    dependency: "direct main"
+    description:
+      name: shared_preferences
+      sha256: "81429e4481e1ccfb51ede496e916348668fd0921627779233bd24cc3ff6abd02"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.2"
   shared_preferences_android:
     dependency: transitive
     description:
@@ -831,4 +839,4 @@ packages:
     version: "6.3.0"
 sdks:
   dart: ">=3.1.0-185.0.dev <4.0.0"
-  flutter: ">=3.7.0-0"
+  flutter: ">=3.7.0"

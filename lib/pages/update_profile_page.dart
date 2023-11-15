@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:chitchat/model/get_user_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,7 +31,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  final TextEditingController _bio_controller = TextEditingController();
+ // final TextEditingController _bio_controller = TextEditingController();
   final TextEditingController _userName_controller = TextEditingController();
   final TextEditingController _password_controller = TextEditingController();
 
@@ -41,7 +40,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       final user = _auth.currentUser;
       if (user != null) {
         if (_userName_controller.toString().isEmpty) {
-          SnackBar(content: Text("Username cannot be empty"));
+          const SnackBar(content: Text("Username cannot be empty"));
           print("Username cannot be empty");
         } else {
           final userDocRef = _firestore.collection('users').doc(user.uid);
@@ -75,7 +74,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   Future uploadImage() async {
     // Future<String> uploadImage() async {
-    String fileName = Uuid().v1();
+    String fileName = const Uuid().v1();
     var ref =
     FirebaseStorage.instance.ref().child("images").child("$fileName.jpg");
     var uploadTask = await ref.putFile(imageFile!);
@@ -94,11 +93,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: FutureBuilder(
               future: UserService().fetchCurrentUser(),
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
@@ -108,7 +107,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   if (currentUser != null) {
                     return Column(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Stack(
@@ -138,7 +137,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                   onPressed: () {
                                     getImage();
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.edit,
                                     color: Colors.black,
                                     size: 20,
@@ -148,37 +147,37 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         SizedBox(
                           width: 200,
                           child: ElevatedButton(
                             onPressed: _saveChanges,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              side: BorderSide.none,
+                              shape: const StadiumBorder(),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(10.0),
                               child: Text(
                                 "Save Changes",
                                 style: TextStyle(fontSize: 16),
                               ),
                             ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              side: BorderSide.none,
-                              shape: StadiumBorder(),
-                            ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Divider(),
-                        SizedBox(
+                        const Divider(),
+                        const SizedBox(
                           height: 10,
                         ),
                         Form(
                             child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: Column(
                             children: [
                               Shortcuts(
@@ -195,10 +194,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                   cursorColor: Colors.amber,
                                   initialValue: currentUser.bio,
                                   decoration: InputDecoration(
-                                      label: Text("Bio"),
-                                      prefixIcon: Icon(Icons.text_snippet),
+                                      label: const Text("Bio"),
+                                      prefixIcon: const Icon(Icons.text_snippet),
                                       prefixIconColor: Colors.black,
-                                      labelStyle: TextStyle(
+                                      labelStyle: const TextStyle(
                                         color: Colors.black,
                                       ),
                                       border: OutlineInputBorder(
@@ -208,12 +207,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       focusedBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(16),
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                             color: Colors.black,
                                           ))),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Shortcuts(
@@ -236,10 +235,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                   initialValue: currentUser.username,
                                   cursorColor: Colors.amber,
                                   decoration: InputDecoration(
-                                      label: Text("User Name"),
-                                      prefixIcon: Icon(Icons.person),
+                                      label: const Text("User Name"),
+                                      prefixIcon: const Icon(Icons.person),
                                       prefixIconColor: Colors.black,
-                                      labelStyle: TextStyle(
+                                      labelStyle: const TextStyle(
                                         color: Colors.black,
                                       ),
                                       border: OutlineInputBorder(
@@ -249,12 +248,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       focusedBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(16),
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                             color: Colors.black,
                                           ))),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Shortcuts(
@@ -267,10 +266,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                   controller: _password_controller,
                                   cursorColor: Colors.amber,
                                   decoration: InputDecoration(
-                                      label: Text("Password"),
-                                      prefixIcon: Icon(Icons.fingerprint),
+                                      label: const Text("Password"),
+                                      prefixIcon: const Icon(Icons.fingerprint),
                                       prefixIconColor: Colors.black,
-                                      labelStyle: TextStyle(
+                                      labelStyle: const TextStyle(
                                         color: Colors.black,
                                       ),
                                       border: OutlineInputBorder(
@@ -280,7 +279,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       focusedBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(16),
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                             color: Colors.black,
                                           ))),
                                 ),
@@ -292,7 +291,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     );
                   }
                 }
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               },
             ),
           ),

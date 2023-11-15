@@ -18,14 +18,14 @@ class _ProfileSectionState extends State<ProfileSection> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: ListTile(
         leading: Container(
           width: 40,
           height: 40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
-            color: Colors.amber,
+            color: Theme.of(context).colorScheme.surface,
           ),
           child: Icon(
             widget.icon,
@@ -41,7 +41,7 @@ class _ProfileSectionState extends State<ProfileSection> {
             borderRadius: BorderRadius.circular(100),
             color: Colors.grey.withOpacity(0.1),
           ),
-          child: Icon(
+          child: const Icon(
             Icons.arrow_forward_ios,
             color: Colors.black,
             size: 15,

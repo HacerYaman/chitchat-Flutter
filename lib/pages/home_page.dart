@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
       return _buildUserList();
     }
     if (_page == 1) {
-      return RecentChatsPage();
+      return const RecentChatsPage();
     }
     return ProfilePage();
   }
@@ -63,22 +63,22 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: pageSituation(),
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
         index: 0,
         height: 60.0,
-        items: <Widget>[
+        items: const <Widget>[
           Icon(Icons.shuffle, size: 30),
           Icon(Icons.chat, size: 30),
           Icon(Icons.person, size: 30),
         ],
-        color: Colors.white,
-        buttonBackgroundColor: Colors.white,
-        backgroundColor: Colors.grey.shade200,
+        color: Theme.of(context).colorScheme.onTertiary,
+        buttonBackgroundColor: Theme.of(context).colorScheme.onTertiary,
+        backgroundColor: Theme.of(context).colorScheme.background,
         animationCurve: Curves.easeInOut,
-        animationDuration: Duration(milliseconds: 150),
+        animationDuration: const Duration(milliseconds: 150),
         onTap: (index) {
           setState(() {
             _page = index;
@@ -94,15 +94,15 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             height: 56,
             decoration: BoxDecoration(
-              color: Colors.amber,
-              borderRadius: BorderRadius.vertical(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: const BorderRadius.vertical(
                 bottom: Radius.circular(15),
               ),
             ),
-            child: Row(
+            child: const Row(
               children: [
                 Text(
                   "Meet People!",
@@ -122,10 +122,10 @@ class _HomePageState extends State<HomePage> {
                 return Text("Error: ${snapshot.error}");
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
               if (!snapshot.hasData) {
-                return Text("No data available");
+                return const Text("No data available");
               }
               return Expanded(
                 child: ListView(
