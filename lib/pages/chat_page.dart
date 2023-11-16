@@ -38,6 +38,20 @@ class _ChatPageState extends State<ChatPage> {
   ScrollController _scrollController = ScrollController();
   final Uuid uuid = const Uuid();
 
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
       String imageUrl = '';
@@ -59,6 +73,7 @@ class _ChatPageState extends State<ChatPage> {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
+
       sendNotification(_messageController.text, widget.receiverToken);
       _messageController.clear();
     }
@@ -135,6 +150,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Column(
@@ -174,15 +190,6 @@ class _ChatPageState extends State<ChatPage> {
                       color: Colors.black,
                       fontSize: 18,
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_drop_down_circle_outlined),
-                    onPressed: () {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        _scrollController
-                            .jumpTo(_scrollController.position.maxScrollExtent);
-                      });
-                    },
                   ),
                 ],
               ),
@@ -343,6 +350,7 @@ class _ChatPageState extends State<ChatPage> {
           return const CircularProgressIndicator();
         }
         return ListView(
+          reverse: true,
           controller: _scrollController,
           children: snapshot.data!.docs
               .map((document) => _buildMessageItem(document))
