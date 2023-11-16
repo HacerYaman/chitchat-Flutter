@@ -86,7 +86,12 @@ class ChatService extends ChangeNotifier {
           child: Container(
             width: MediaQuery.of(context).size.width * 0.8,
             height: MediaQuery.of(context).size.height * 0.8,
-            child: Image.network(imageUrl),
+            child: InteractiveViewer(
+              boundaryMargin: EdgeInsets.all(20.0),
+              minScale: 0.5,
+              maxScale: 3.0,
+              child: Image.network(imageUrl),
+            ),
           ),
         );
       },

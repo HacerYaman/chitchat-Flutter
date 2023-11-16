@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
             child: const Row(
               children: [
                 Text(
-                  "Meet People!",
+                  "onurum da onurum bi tanecik onurum",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18,

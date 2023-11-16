@@ -51,23 +51,20 @@ class MyApp extends StatelessWidget {
     final User? currentUser = _auth.currentUser;
     final bool isLogged = currentUser != null;
 
-    return ChangeNotifierProvider.value(
-      value: themeProvider,
-      child: GetMaterialApp(
-        routes: {
-          '/profile': (context) => ProfilePage(),
-          // Add more routes here
-        },
-        debugShowCheckedModeBanner: false,
-        theme: themeProvider.themeData,
-        home: AnimatedSplashScreen(
-            duration: 2000,
-            splash: Image.asset("lib/assets/ccicon.png"),
-            splashIconSize: 200,
-            nextScreen: isLogged ? const AuthGate() : const OnboardingPage(),
-            splashTransition: SplashTransition.fadeTransition,
-            backgroundColor: Colors.white),
-      ),
+    return GetMaterialApp(
+      routes: {
+        '/profile': (context) => ProfilePage(),
+        // Add more routes here
+      },
+      debugShowCheckedModeBanner: false,
+      theme: Provider.of<ThemeProvider>(context).themeData,
+      home: AnimatedSplashScreen(
+          duration: 2000,
+          splash: Image.asset("lib/assets/ccicon.png"),
+          splashIconSize: 200,
+          nextScreen: isLogged ? const AuthGate() : const OnboardingPage(),
+          splashTransition: SplashTransition.fadeTransition,
+          backgroundColor: Colors.white),
     );
   }
 }

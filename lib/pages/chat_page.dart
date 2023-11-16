@@ -68,12 +68,6 @@ class _ChatPageState extends State<ChatPage> {
       );
       imageUrl = '';
 
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-
       sendNotification(_messageController.text, widget.receiverToken);
       _messageController.clear();
     }
@@ -216,6 +210,7 @@ class _ChatPageState extends State<ChatPage> {
         children: [
           Expanded(
             child: TextField(
+              autocorrect: false,
               controller: _messageController,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
