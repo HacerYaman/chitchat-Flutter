@@ -27,28 +27,22 @@ class ThemeProvider with ChangeNotifier {
     if (storedThemeMode != null) {
       themeMode = storedThemeMode;
     }
-
-    if(themeMode==false){
-      themeData=lightMode;
-    }else{
-      themeData=darkMode;
+    if (themeMode == false) {
+      themeData = lightMode;
+    } else {
+      themeData = darkMode;
     }
-
-
-    notifyListeners();
-
+    //notifyListeners();
   }
 
   Future<void> _saveThemeMode(bool themeMode) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('themeMode', themeMode);
-
-    if(themeMode==false){
-      themeData=lightMode;
-    }else{
-      themeData=darkMode;
+    if (themeMode == false) {
+      themeData = lightMode;
+    } else {
+      themeData = darkMode;
     }
-
     notifyListeners();
   }
 

@@ -77,49 +77,6 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
-  /* Future getImage() async {
-    ImagePicker _picker = ImagePicker();
-    await _picker.pickImage(source: ImageSource.gallery).then((xFile) async {
-      if (xFile != null) {
-        File originalImage = File(xFile.path);
-        CroppedFile? croppedImage = await _cropImage(originalImage);
-        if (croppedImage != null) {
-          setState(() {
-            imageFile = croppedImage;
-          });
-        }
-      }
-    });
-  }*/
-
-  /*Future<File?> _cropImage(File imageFile) async {
-    CroppedFile? croppedFile = await ImageCropper().cropImage(
-      sourcePath: imageFile.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
-      ],
-      uiSettings: [
-        AndroidUiSettings(
-            toolbarTitle: 'Crop Your Image',
-            toolbarColor: Colors.amber,
-            toolbarWidgetColor: Colors.black,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        IOSUiSettings(
-          title: 'Crop Your Image',
-        ),
-        WebUiSettings(
-          context: context,
-        ),
-      ],
-    );
-    return File(croppedFile.path);
-  }*/
-
   Future uploadImage() async {
     String fileName = const Uuid().v1();
     var ref =
@@ -244,9 +201,9 @@ class _ChatPageState extends State<ChatPage> {
     //mesaj barı
     return Container(
       height: 50,
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.onTertiary,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(16), topRight: Radius.circular(16))),
       child: Row(
         children: [
@@ -261,12 +218,12 @@ class _ChatPageState extends State<ChatPage> {
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(16),
                         topRight: Radius.circular(16))),
-                focusedBorder:  OutlineInputBorder(
+                focusedBorder: OutlineInputBorder(
                     //text yazmaya başladığındaki hali kutunun
                     borderSide: BorderSide(
                       color: Theme.of(context).colorScheme.onTertiary,
                     ),
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(16),
                         topRight: Radius.circular(16))),
                 fillColor: Theme.of(context).colorScheme.onTertiary,
@@ -281,13 +238,16 @@ class _ChatPageState extends State<ChatPage> {
           ),
           IconButton(
             onPressed: getImage,
-            icon:  const Icon(Icons.photo, color: Colors.black),
+            icon: const Icon(Icons.photo, color: Colors.black),
           ),
           IconButton(
             onPressed: () {
               sendMessage();
             },
-            icon: const Icon(Icons.arrow_forward_ios, color: Colors.black,),
+            icon: const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.black,
+            ),
           )
         ],
       ),
@@ -361,8 +321,8 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                     Text(
                       messageTime,
-                      style:
-                          const TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
+                      style: const TextStyle(
+                          fontSize: 10, fontStyle: FontStyle.italic),
                     ),
                   ],
                 ),
