@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
             stream: FirebaseFirestore.instance.collection("users").snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Text("Error: ${snapshot.error}");
+                return Text("NO ERROR: ${snapshot.error}");
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();

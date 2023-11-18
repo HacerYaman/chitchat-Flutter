@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Image.asset(
@@ -54,50 +54,50 @@ class _LoginPageState extends State<LoginPage> {
                     width: 100,
                     height: 100,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
-                  Text(
+                  const Text(
                     "Welcome back you\'ve been missed! ❤️",
                     style: TextStyle(
                       fontSize: 16,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   MyTextField(
                       controller: emailController,
                       hintText: "email",
                       obscureText: false),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   MyTextField(
                       controller: passwordController,
                       hintText: "password",
                       obscureText: true),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   MyButton(
                     buttonText: "Sign In",
                     onTap: signIn,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Not a member?",
                         style: TextStyle(),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 4,
                       ),
                       GestureDetector(
                         onTap: widget.onTap,
-                        child: Text(
+                        child: const Text(
                           "Register now",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,

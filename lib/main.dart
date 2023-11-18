@@ -1,4 +1,3 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:chitchat/constants/theme/theme_provider.dart';
 import 'package:chitchat/firebase_options.dart';
 import 'package:chitchat/pages/onboarding_page.dart';
@@ -37,7 +36,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   ThemeProvider themeProvider;
 
   MyApp({Key? key, required this.themeProvider}) : super(key: key);
@@ -51,20 +49,27 @@ class MyApp extends StatelessWidget {
     final User? currentUser = _auth.currentUser;
     final bool isLogged = currentUser != null;
 
-    return GetMaterialApp(
-      routes: {
-        '/profile': (context) => ProfilePage(),
-        // Add more routes here
-      },
-      debugShowCheckedModeBanner: false,
-      theme: Provider.of<ThemeProvider>(context).themeData,
-      home: AnimatedSplashScreen(
-          duration: 2000,
-          splash: Image.asset("lib/assets/ccicon.png"),
-          splashIconSize: 200,
-          nextScreen: isLogged ? const AuthGate() : const OnboardingPage(),
-          splashTransition: SplashTransition.fadeTransition,
-          backgroundColor: Colors.white),
-    );
+    return ChangeNotifierProvider(
+        create: (context) => ThemeProvider(),
+        builder: (context, _) {
+          return GetMaterialApp(
+            routes: {
+              '/profile': (context) => ProfilePage(),
+              // Add more routes here
+            },
+            debugShowCheckedModeBanner: false,
+            theme: Provider.of<ThemeProvider>(context).themeData,
+            home: isLogged ? const AuthGate() : const OnboardingPage(),
+
+            /*AnimatedSplashScreen(
+                duration: 2000,
+                splash: Image.asset("lib/assets/ccicon.png"),
+                splashIconSize: 200,
+                nextScreen:
+                    isLogged ? const AuthGate() : const OnboardingPage(),
+                splashTransition: SplashTransition.fadeTransition,
+                backgroundColor: Colors.white),*/
+          );
+        });
   }
 }

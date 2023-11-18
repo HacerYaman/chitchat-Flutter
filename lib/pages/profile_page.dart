@@ -35,11 +35,9 @@ class _ProfilePageState extends State<ProfilePage> {
     authService.signOut();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-    Provider.of<ThemeProvider>(context, listen: false).loadThemeMode();
+    //Provider.of<ThemeProvider>(context, listen: false).loadThemeMode();
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -60,10 +58,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             const Icon(Icons.sunny),
                             CupertinoSwitch(
-                              value: Provider.of<ThemeProvider>(context,).themeMode,
+                              value: Provider.of<ThemeProvider>(
+                                context,
+                              ).themeMode,
                               activeColor: AppColors.blueGreyColor,
                               onChanged: (value) {
-                                Provider.of<ThemeProvider>(context, listen: false).themeChanged();
+                                Provider.of<ThemeProvider>(context,
+                                        listen: false)
+                                    .themeChanged();
                               },
                             ),
                             const Icon(Icons.dark_mode),

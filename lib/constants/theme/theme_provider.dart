@@ -8,6 +8,10 @@ class ThemeProvider with ChangeNotifier {
 
   ThemeData get themeData => _themeData;
 
+  ThemeProvider() {       //şunu eklemeden temayı mainde yüklemiyo  ?????????????
+    loadThemeMode();
+  }
+
   set themeData(ThemeData themeData) {
     _themeData = themeData;
     notifyListeners();
